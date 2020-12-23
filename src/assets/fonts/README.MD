@@ -1,2 +1,4 @@
-Ukuran perhuruf = 10 x 10 px
-Ukuran PNG = 110 x 120 px
+<p>
+Ukuran perhuruf = 10 x 10 px<br />
+Ukuran PNG = 110 x 120 px<br />
+</p>
