@@ -9,7 +9,6 @@ public class Background
 	
 	private double x;
 	private double y;
-	private double moveScale;
 	
 	public Background(String s, double ms)
 	{
@@ -17,17 +16,11 @@ public class Background
 		try{
 			
 			image = ImageIO.read(getClass().getResourceAsStream(s));
-			moveScale = ms;
 			
 		}catch(Exception e){
 			e.printStackTrace();
 		}
 		
-	}
-	
-	public void setPosition(double x, double y){
-		this.x = (x * moveScale) % Menu.menuWidth;
-		this.y = (y * moveScale) % Menu.menuHeight;
 	}
 	
 	public void draw(Graphics2D g){

@@ -37,7 +37,7 @@ public class MainMenu extends JPanel
 
 			BufferedImage button = ImageIO.read(new File("C:/Users/Rafki/workspace/fp-pbo-2021/res/ui/UserInterface/Tombol.png"));
 			
-			buttonMenu[0]  = button.getSubimage(0, 50, 100, 12);
+			buttonMenu [0]  = button.getSubimage(0, 50, 100, 12);
 			buttonMenu [1] = button.getSubimage(0, 62, 100, 12);
 			buttonMenu [2] = button.getSubimage(0, 74, 100, 12);
 			
