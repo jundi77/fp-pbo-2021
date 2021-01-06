@@ -1,0 +1,1 @@
+Semua entitas bersekala 32 x 32
