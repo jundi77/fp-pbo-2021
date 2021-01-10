@@ -10,7 +10,7 @@ public class Main {
 	{
 		
 		JFrame window = new JFrame("Wizard Who Speaks");
-		window.setContentPane(new Menu());
+		window.setContentPane(new GamePanel());
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setResizable(false);
 		window.pack();

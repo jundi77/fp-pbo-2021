@@ -26,9 +26,10 @@ public class Menu extends JPanel
 		setFocusable(true);
 		requestFocus();
 		setVisible(true);
-		this.add(renderer);
+//		this.add(renderer);
 
-		Ticker.addActionListener(renderer);
+//		Ticker.addActionListener(renderer);
+		this.addKeyListener(new KeyMapper());
 		init();
 	}
 
