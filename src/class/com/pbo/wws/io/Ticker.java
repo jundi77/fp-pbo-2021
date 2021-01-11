@@ -1,4 +1,4 @@
-package com.pbo.wws;
+package com.pbo.wws.io;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import javax.swing.Timer;
 
 public class Ticker {
-	private static int RATE_PER_SECOND = 30;
+	private static int RATE_PER_SECOND = 60;
 	private static Timer timer;
 	private static ArrayList<ActionListener> pushActionList;
 	

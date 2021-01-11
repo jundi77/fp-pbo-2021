@@ -6,6 +6,11 @@ import java.awt.event.KeyEvent;
 
 import javax.imageio.ImageIO;
 
+import com.pbo.wws.frame.Main;
+import com.pbo.wws.io.Renderer;
+import com.pbo.wws.state.GameState;
+import com.pbo.wws.state.GameStateManager;
+
 public class EndState extends GameState implements Renderable, Exitable
 {
 	private Image image;
@@ -16,8 +21,8 @@ public class EndState extends GameState implements Renderable, Exitable
 		this.gsm = gsm;
 		
 		try{
-			image = (Image) ImageIO.read(getClass().getResourceAsStream("/ui/UserInterface/Pause.png"));
-			imageUI = (Image) ImageIO.read(getClass().getResourceAsStream("/ui/UserInterface/TheEnd.png")).getScaledInstance(300, 46, Image.SCALE_DEFAULT);
+			image = (Image) ImageIO.read(getClass().getResourceAsStream(Main.resourcePath + "/ui/UserInterface/Pause.png"));
+			imageUI = (Image) ImageIO.read(getClass().getResourceAsStream(Main.resourcePath + "/ui/UserInterface/TheEnd.png")).getScaledInstance(300, 46, Image.SCALE_DEFAULT);
 			
 		}catch(Exception e){
 			e.printStackTrace();

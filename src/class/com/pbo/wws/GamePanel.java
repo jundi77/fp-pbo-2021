@@ -6,30 +6,39 @@ import java.awt.event.KeyListener;
 
 import javax.swing.JPanel;
 
+import com.pbo.wws.io.KeyMapper;
+import com.pbo.wws.io.Renderer;
+import com.pbo.wws.io.Ticker;
+import com.pbo.wws.state.GameStateManager;
+
 @SuppressWarnings("serial")
-public class GamePanel extends JPanel implements KeyListener
+public class GamePanel extends JPanel
 {
 	Renderer renderer = new Renderer();
-	KeyMapper keymapper = new KeyMapper();
+	KeyMapper keyMapper = new KeyMapper();
 	
 	//dimensions
 	public static final int menuWidth = 200;
 	public static final int menuHeight = 150;
+	private static int ZOOM = 1;
 	
 	//gameStateManager
 	private GameStateManager gsm;
 	
 	public GamePanel()
 	{
-		setLayout(new GridLayout(1, 1, 0, 0));
 		setFocusable(true);
 		requestFocus();
-		setVisible(true);
-		this.add(renderer);
+
+		setLayout(new GridLayout(1, 1, 0, 0));
+		addKeyListener(keyMapper);
+		add(renderer);
+		
 		Ticker.start();
 		Ticker.addActionListener(renderer);
+		
+		setVisible(true);
 		init();
-		addKeyListener(this);
 	}
 
 	//Sudah ada dikelas renderer
@@ -38,22 +47,12 @@ public class GamePanel extends JPanel implements KeyListener
 	{
 		gsm = new GameStateManager();
 	}
-
-	@Override
-	public void keyPressed(KeyEvent k) {
-		// TODO Auto-generated method stub
-		gsm.keyPressed(k.getKeyCode());
+	
+	public static int getZoom() {
+		return ZOOM;
 	}
-
-	@Override
-	public void keyReleased(KeyEvent k) {
-		// TODO Auto-generated method stub
-		gsm.keyReleased(k.getKeyCode());
-	}
-
-	@Override
-	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
+	
+	public static void setZoom(int zoom) {
+		ZOOM = zoom;
 	}
 }

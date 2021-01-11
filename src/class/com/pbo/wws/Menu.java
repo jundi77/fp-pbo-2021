@@ -8,6 +8,10 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
+import com.pbo.wws.io.KeyMapper;
+import com.pbo.wws.io.Renderer;
+import com.pbo.wws.state.GameStateManager;
+
 @SuppressWarnings("serial")
 public class Menu extends JPanel
 {
