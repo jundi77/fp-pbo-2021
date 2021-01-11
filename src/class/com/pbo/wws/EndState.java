@@ -16,8 +16,8 @@ public class EndState extends GameState implements Renderable, Exitable
 		this.gsm = gsm;
 		
 		try{
-			image = (Image) ImageIO.read(getClass().getResourceAsStream("/ui/UserInterface/Pause.png"));
-			imageUI = (Image) ImageIO.read(getClass().getResourceAsStream("/ui/UserInterface/TheEnd.png")).getScaledInstance(300, 46, Image.SCALE_DEFAULT);
+			image = (Image) ImageIO.read(getClass().getResourceAsStream("res/ui/UserInterface/Pause.png"));
+			imageUI = (Image) ImageIO.read(getClass().getResourceAsStream("res/ui/UserInterface/TheEnd.png")).getScaledInstance(300, 46, Image.SCALE_DEFAULT);
 			
 		}catch(Exception e){
 			e.printStackTrace();

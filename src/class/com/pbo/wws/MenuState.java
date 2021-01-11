@@ -22,8 +22,8 @@ public class MenuState extends GameState implements Renderable, Exitable
 		Renderer.addDrawable(this);
 		
 		try{
-			image = (Image) ImageIO.read(getClass().getResourceAsStream("/ui/UserInterface/Menu.png"));
-			BufferedImage imageTombol = ImageIO.read(getClass().getResourceAsStream("/ui/UserInterface/Tombol.png"));
+			image = (Image) ImageIO.read(getClass().getResourceAsStream("ui/UserInterface/Menu.png"));
+			BufferedImage imageTombol = ImageIO.read(getClass().getResourceAsStream("res/ui/UserInterface/Tombol.png"));
 			
 			int y=72;
 			for(int i = 0; i < 6 ;i++)
