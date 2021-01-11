@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -20,20 +21,23 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-public class Place extends JPanel{
-	private static final String placeRootDir = "src/assets/tile";
+import com.pbo.wws.frame.Main;
+
+public class Place implements Renderable, Movable{
+	private static final String placeRootDir = Main.resourcePath + "/tile/map";
+	private static final String tmxFileName = "mapTile.tmx";
+
 	private static final int WALL_UP = 0;
-	private static final int WALL_DOWN = 0;
-	private static final int WALL_LEFT = 0;
-	private static final int WALL_RIGHT = 0;
-	private static final int CHECKPOINT = 0;
+	private static final int WALL_DOWN = 1;
+	private static final int WALL_LEFT = 2;
+	private static final int WALL_RIGHT = 3;
+	private static final int CHECKPOINT = 4;
+
 	private static DocumentBuilderFactory documentBuilderFactory = null;
 	private static DocumentBuilder documentBuilder;
-	private Document tmxDoc = null, 
-					 tsxDoc = null;
-	private File tmxFile = null,
-				 tsxFile = null,
-				 imgFile;
+
+	private java.net.URL tmxPath = null, tsxPath = null, imgPath = null;
+
 	private BufferedImage img;
 	private String name;
 	private int tileWidth, tileHeight, srcTileColumns, srcTileRows, mapWidth, mapHeight, width, height;
@@ -42,23 +46,23 @@ public class Place extends JPanel{
 //	private HashMap<int[], > placesAround
 //	private HashMap<Enemy, int[]> enemies;
 	
-	public Place(String name, String tmxFileName) throws ParserConfigurationException, SAXException, IOException {
+	public Place(String name) throws ParserConfigurationException, SAXException, IOException {
 		if (documentBuilderFactory == null) {
 			documentBuilderFactory= DocumentBuilderFactory.newDefaultInstance();
 			documentBuilder = documentBuilderFactory.newDocumentBuilder();
 		}
 
 		this.name = name;
-		this.tmxFile = new File(placeRootDir + "/" + name + "/" + tmxFileName);
-		boolean a = tmxFile.exists();
-		this.tmxDoc = documentBuilder.parse(tmxFile);
-		
+		this.tmxPath = getClass().getResource(placeRootDir + "/" + name + "/" + tmxFileName);
+
 		this.layers = new ArrayList<int[][]>();
-		this.fillAttributeFromTmx();
+		this.fillAttribute();
 	}
 
-	public void fillAttributeFromTmx() throws IOException, SAXException {
-		Element map = this.tmxDoc.getDocumentElement();
+	public void fillAttribute() throws IOException, SAXException {
+		Document tmxDoc = documentBuilder.parse(this.tmxPath.getFile());
+		
+		Element map = tmxDoc.getDocumentElement();
 		Node tileset = map.getElementsByTagName("tileset").item(0);
 		NodeList layers = map.getElementsByTagName("layer");
 
@@ -67,6 +71,7 @@ public class Place extends JPanel{
 		this.tileWidth  = Integer.parseInt(map.getAttributes().getNamedItem("tilewidth").getNodeValue());
 		this.tileHeight = Integer.parseInt(map.getAttributes().getNamedItem("tileheight").getNodeValue());
 
+		// untuk sekarang, cukup menyimpan satu layer saja
 		for (int i = 0; i < layers.getLength(); ++i) {
 			Element layer = (Element) layers.item(i);
 			Node data = layer.getElementsByTagName("data").item(0);
@@ -80,15 +85,17 @@ public class Place extends JPanel{
 					layerData[j - 1][k] = Integer.parseInt(dataRowContent[k]);
 				}
 			}
-			
+
 			this.layers.add(layerData);
 		}
 		
 
-		this.tsxFile = new File(placeRootDir + "/" + name + "/" + tileset.getAttributes().getNamedItem("source").getNodeValue());
-		this.tsxDoc = documentBuilder.parse(tsxFile);
+		String tmxSrc = tileset.getAttributes().getNamedItem("source").getNodeValue();
+		this.tsxPath = getClass().getResource(placeRootDir + "/" + name + "/" + tmxSrc);
+		
+		Document tsxDoc = documentBuilder.parse(tsxPath.getFile());
 
-		Element tsxTileset = this.tsxDoc.getDocumentElement();
+		Element tsxTileset = tsxDoc.getDocumentElement();
 		Node image = tsxTileset.getElementsByTagName("image").item(0);
 
 		NamedNodeMap tsxTilesetAttr = tsxTileset.getAttributes();
@@ -97,16 +104,14 @@ public class Place extends JPanel{
 		this.srcTileColumns = Integer.parseInt(tsxTilesetAttr.getNamedItem("columns").getNodeValue());
 		this.srcTileRows = Integer.parseInt(tsxTilesetAttr.getNamedItem("tilecount").getNodeValue()) / this.srcTileColumns;
 
-		this.imgFile = new File( placeRootDir + "/" + name + "/" + imageAttr.getNamedItem("source").getNodeValue());
-		this.img = ImageIO.read(imgFile);
+		String tsxImgSrc = imageAttr.getNamedItem("source").getNodeValue();
+		this.imgPath = getClass().getResource( placeRootDir + "/" + name + "/" + tsxImgSrc);
+		this.img = ImageIO.read(this.imgPath);
 	}
 	
 	@Override
-	public void paint(Graphics g) {
-		// TODO Auto-generated method stub
-		super.paint(g);
-
-		int[][] firstLayer = layers.get(1);
+	public void render(Graphics g) {
+		int[][] firstLayer = layers.get(0);
 		for (int i = 0; i < firstLayer.length; ++i) {
 			for (int j = 0; j < firstLayer[i].length; ++j) {
 				if (firstLayer[i][j] == 0) continue;
@@ -129,5 +134,29 @@ public class Place extends JPanel{
 				g.drawImage(this.img, dx1, dy1, dx2, dy2, sx1, sy1, sx2, sy2, null, null);
 			}
 		}
+	}
+
+	@Override
+	public void setMovingStatus(boolean move) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean getMovingStatus() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void setVisible(boolean visible) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean getVisibility() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

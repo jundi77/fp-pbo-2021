@@ -5,6 +5,8 @@ import java.awt.Dimension;
 
 import javax.swing.JLayeredPane;
 
+import com.pbo.wws.frame.Main;
+
 public abstract class Scene {
 	private JLayeredPane layers = new JLayeredPane();
 	

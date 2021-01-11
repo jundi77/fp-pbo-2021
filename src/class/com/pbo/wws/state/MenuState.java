@@ -1,4 +1,4 @@
-package com.pbo.wws;
+package com.pbo.wws.state;
 
 import java.awt.Graphics;
 import java.awt.Image;
@@ -6,6 +6,11 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
+
+import com.pbo.wws.Exitable;
+import com.pbo.wws.Renderable;
+import com.pbo.wws.frame.Main;
+import com.pbo.wws.io.Renderer;
 
 
 public class MenuState extends GameState implements Renderable, Exitable
@@ -22,8 +27,8 @@ public class MenuState extends GameState implements Renderable, Exitable
 		Renderer.addDrawable(this);
 		
 		try{
-			image = (Image) ImageIO.read(getClass().getResourceAsStream("ui/UserInterface/Menu.png"));
-			BufferedImage imageTombol = ImageIO.read(getClass().getResourceAsStream("res/ui/UserInterface/Tombol.png"));
+			image = (Image) ImageIO.read(getClass().getResourceAsStream(Main.resourcePath + "/ui/UserInterface/Menu.png"));
+			BufferedImage imageTombol = ImageIO.read(getClass().getResourceAsStream(Main.resourcePath + "/ui/UserInterface/Tombol.png"));
 			
 			int y=72;
 			for(int i = 0; i < 6 ;i++)
