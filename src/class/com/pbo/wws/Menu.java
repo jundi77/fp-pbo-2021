@@ -1,50 +1,46 @@
 package com.pbo.wws;
 
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
+import java.awt.image.BufferedImage;
+
 import javax.swing.JPanel;
 
 import com.pbo.wws.io.KeyMapper;
 import com.pbo.wws.io.Renderer;
-import com.pbo.wws.io.Ticker;
 import com.pbo.wws.state.GameStateManager;
 
 @SuppressWarnings("serial")
-public class GamePanel extends JPanel
+public class Menu extends JPanel
 {
 	Renderer renderer = new Renderer();
-	KeyMapper keyMapper = new KeyMapper();
-
-	private static int ZOOM = 1;
+	
+	//dimensions
+	public static final int menuWidth = 200;
+	public static final int menuHeight = 150;
 	
 	//gameStateManager
 	private GameStateManager gsm;
 	
-	public GamePanel()
+	public Menu()
 	{
+		setLayout(new GridLayout(1, 1, 0, 0));
 		setFocusable(true);
 		requestFocus();
-
-		setLayout(new GridLayout(1, 1, 0, 0));
-		addKeyListener(keyMapper);
-		add(renderer);
-		
-		Ticker.start();
-		Ticker.addActionListener(renderer);
-		
 		setVisible(true);
+//		this.add(renderer);
+
+//		Ticker.addActionListener(renderer);
+		this.addKeyListener(new KeyMapper());
 		init();
 	}
+
+	//Sudah ada dikelas renderer
 	
 	private void init() 
 	{
 		gsm = new GameStateManager();
-	}
-	
-	public static int getZoom() {
-		return ZOOM;
-	}
-	
-	public static void setZoom(int zoom) {
-		ZOOM = zoom;
 	}
 }

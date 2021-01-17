@@ -1,4 +1,4 @@
-package com.pbo.wws;
+package com.pbo.wws.state;
 
 import java.awt.Graphics;
 import java.awt.Image;
@@ -7,7 +7,14 @@ import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
 
-public class PauseState extends GameState implements Renderable, Exitable
+import com.pbo.wws.Exitable;
+import com.pbo.wws.MenuChoicable;
+import com.pbo.wws.Renderable;
+import com.pbo.wws.frame.Main;
+import com.pbo.wws.io.KeyMapper;
+import com.pbo.wws.io.Renderer;
+
+public class PauseState extends GameState implements Renderable, Exitable, MenuChoicable
 {
 	
 	private int currentChoice = 0;
@@ -19,8 +26,8 @@ public class PauseState extends GameState implements Renderable, Exitable
 		this.gsm = gsm;
 		
 		try{
-			image = (Image) ImageIO.read(getClass().getResourceAsStream("/ui/UserInterface/Pause.png"));
-			BufferedImage imageTombol = ImageIO.read(getClass().getResourceAsStream("/ui/UserInterface/Tombol.png"));
+			image = (Image) ImageIO.read(getClass().getResourceAsStream(Main.resourcePath + "/ui/UserInterface/Pause.png"));
+			BufferedImage imageTombol = ImageIO.read(getClass().getResourceAsStream(Main.resourcePath + "/ui/UserInterface/Tombol.png"));
 			
 			imageUI[4] = (Image)imageTombol.getSubimage(0, 0, 100, 12).getScaledInstance(300, 36, Image.SCALE_DEFAULT);
 			
@@ -36,10 +43,36 @@ public class PauseState extends GameState implements Renderable, Exitable
 		}
 	}
 
-	private void selectChoice() {
+	@Override
+	public void moveChoice(int keyCode) {
+		
+		if(KeyMapper.isPressed(KeyMapper.KEY_ENTER)){
+			selectChoice();
+			}
+		if(KeyMapper.isPressed(KeyMapper.KEY_UP)){
+			System.out.println("Ke atas");
+			currentChoice--;
+			if(currentChoice == -1){
+				currentChoice = imageUI.length/ 2 - 1;
+			}
+		}
+		if(KeyMapper.isPressed(KeyMapper.KEY_DOWN)){
+			System.out.println("Ke bawah");
+			currentChoice++;
+			if(currentChoice == imageUI.length/ 2){
+				currentChoice = 0;
+			}
+		}
+		
+	}
+	
+	public void selectChoice() {
 		if(currentChoice == 0){
 			setVisible(false);
+			//if(array monster kosong)
 			GameStateManager.setState(GameStateManager.PLAYSTATE);
+			//else if (jika array monster ada)
+			GameStateManager.setState(GameStateManager.BATTLESTATE);
 		}
 		if(currentChoice == 1){
 			quit();
@@ -53,36 +86,21 @@ public class PauseState extends GameState implements Renderable, Exitable
 	}
 
 	@Override
-	public void keyPressed(int k) {
-
-		if(k == KeyEvent.VK_ENTER){
-			selectChoice();
-			}
-		if(k == KeyEvent.VK_UP){
-			System.out.println("Ke atas");
-			currentChoice--;
-			if(currentChoice == -1){
-				currentChoice = imageUI.length/ 2 - 1;
-			}
-		}
-		if(k == KeyEvent.VK_DOWN){
-			System.out.println("Ke bawah");
-			currentChoice++;
-			if(currentChoice == imageUI.length/ 2){
-				currentChoice = 0;
-			}
-		}
-		
-	}
-
-	@Override
-	public void keyReleased(int k) {
-		
-	}
-
-	@Override
 	public void render(Graphics g) {
 
+		if(KeyMapper.isPressed(KeyMapper.KEY_UP)){
+			KeyMapper.confirmArrow();
+			moveChoice(KeyMapper.KEY_UP);
+		}
+		else if(KeyMapper.isPressed(KeyMapper.KEY_DOWN)){
+			KeyMapper.confirmArrow();
+			moveChoice(KeyMapper.KEY_DOWN);
+		}
+		else if(KeyMapper.isPressed(KeyMapper.KEY_ENTER)){
+			KeyMapper.confirmEnter();
+			moveChoice(KeyMapper.KEY_ENTER);
+		}
+			
 		g.drawImage(image, 0, 0, 1280, 720, null);
 		g.drawImage(imageUI[4],100,50,null);
 		for(int options = 0; options < ((imageUI.length - 1) / 2); options++)
@@ -116,5 +134,7 @@ public class PauseState extends GameState implements Renderable, Exitable
 		setVisible(false);
 		GameStateManager.setState(GameStateManager.MENUSTATE);
 	}
+
+
 
 }

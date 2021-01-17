@@ -11,6 +11,10 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import javax.swing.Timer;
 
+import com.pbo.wws.frame.Main;
+import com.pbo.wws.io.KeyMapper;
+import com.pbo.wws.io.Renderer;
+
 import javax.imageio.ImageIO;
 import javax.swing.Action;
 import javax.swing.JComponent;
@@ -19,11 +23,10 @@ import javax.swing.JPanel;
 public class Character implements Renderable, Movable{
 	private static final String characterRootDir = "src/assets/entity";
 	private static final int TOTAL_MOVEMENT = 5;
-	private boolean visible;
+	private boolean visible, moving;
 	private String name;
 	private BufferedImage sprite;
 	private int x, y, xSpeed, ySpeed, width, height, zoom, direction, movement;
-	private Main window;
 	
 	public BufferedImage getSprite() {
 		return sprite;
@@ -70,7 +73,7 @@ public class Character implements Renderable, Movable{
 	}
 
 	public void setWidth(int width) {
-//		this.width = (int) (width * Main.getZoom());
+		this.width = (int) (width * GamePanel.getZoom());
 	}
 
 	public int getHeight() {
@@ -78,22 +81,21 @@ public class Character implements Renderable, Movable{
 	}
 
 	public void setHeight(int height) {
-//		this.height = (int) (height * Main.getZoom());
+		this.height = (int) (height * GamePanel.getZoom());
 	}
 
-	public Character(Main window) {
+	public Character() {
 		this.movement = 0;
 		this.direction = DIRECTION_DOWN;
 		this.xSpeed = this.ySpeed = 32;
-		this.window = window;
 		
 		try {
-			sprite = ImageIO.read(new File(characterRootDir + "/main/spriteUtama(32x32).png"));
+			sprite = ImageIO.read(getClass().getResourceAsStream(Main.resourcePath + "/entity/main/spriteUtama(32x32).png"));
 			System.out.println("[Character]: Sprite is loaded");
 			this.setHeight(120);
 			this.setWidth(120);
-//			this.setX(window.getWindowWidth() / 2);
-//			this.setY(window.getWindowHeight() / 2);
+			this.setX(Main.getWidth() / 2);
+			this.setY(Main.getHeight() / 2);
 			System.out.println(this.x);
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -101,59 +103,59 @@ public class Character implements Renderable, Movable{
 		}
 	}
 
-	public void KeyMovementWatcher() {
+	public void keyMovementWatcher() {
 		// TODO diperbaiki
-//		if (KeyMapper.getKeyStatus(KeyMapper.KEY_W)) {	
-//			this.direction = DIRECTION_UP;
-//			this.y -= this.ySpeed;
-//			this.movement = ++this.movement % TOTAL_MOVEMENT;
-//		} else if (KeyMapper.getKeyStatus(KeyMapper.KEY_S)) {
-//			this.direction = DIRECTION_DOWN;
-//			this.y += this.ySpeed;
-//			this.movement = ++this.movement % TOTAL_MOVEMENT;
-//		}  else if (KeyMapper.getKeyStatus(KeyMapper.KEY_A)) {
-//			this.direction = DIRECTION_LEFT;
-//			this.x -= this.xSpeed;
-//			this.movement = ++this.movement % TOTAL_MOVEMENT;
-//		}  else if (KeyMapper.getKeyStatus(KeyMapper.KEY_D)) {
-//			this.direction = DIRECTION_RIGHT;
-//			this.x += this.ySpeed;
-//			this.movement = ++this.movement % TOTAL_MOVEMENT;
-//		}
-//
-//		System.out.println("[Character]: x=" + this.x + " y=" + this.y);
+		if (KeyMapper.isPressed(KeyMapper.KEY_W)) {	
+			this.direction = DIRECTION_UP;
+			this.y -= this.ySpeed;
+			this.movement = ++this.movement % TOTAL_MOVEMENT;
+		} else if (KeyMapper.isPressed(KeyMapper.KEY_S)) {
+			this.direction = DIRECTION_DOWN;
+			this.y += this.ySpeed;
+			this.movement = ++this.movement % TOTAL_MOVEMENT;
+		}  else if (KeyMapper.isPressed(KeyMapper.KEY_A)) {
+			this.direction = DIRECTION_LEFT;
+			this.x -= this.xSpeed;
+			this.movement = ++this.movement % TOTAL_MOVEMENT;
+		}  else if (KeyMapper.isPressed(KeyMapper.KEY_D)) {
+			this.direction = DIRECTION_RIGHT;
+			this.x += this.ySpeed;
+			this.movement = ++this.movement % TOTAL_MOVEMENT;
+		}
+
+		System.out.println("[Character]: x=" + this.x + " y=" + this.y);
 	}
 
 	@Override
 	public void render(Graphics g) {
-		this.x += xSpeed;
+//		this.x += xSpeed;
 		// draw background
 		// draw buttonnya
+		keyMovementWatcher();
 		g.drawImage(sprite, x, y, x + width, y + height, 32 * this.movement, 32 * this.direction, 32 * this.movement + 32, 32 * this.direction + 32, null, null);
 	}
 
-
 	@Override
 	public void setMovingStatus(boolean move) {
-		// TODO Auto-generated method stub
-		
+		moving = move;
 	}
 
 	@Override
 	public boolean getMovingStatus() {
-		// TODO Auto-generated method stub
-		return false;
+		return moving;
 	}
 
 	@Override
 	public void setVisible(boolean visible) {
-		// TODO Auto-generated method stub
-		
+		if (visible) {
+			Renderer.addDrawable(this);
+		} else {
+			Renderer.removeDrawable(this);
+		}
 	}
 
 	@Override
 	public boolean getVisibility() {
-		// TODO Auto-generated method stub
-		return false;
+		return visible;
 	}
 }

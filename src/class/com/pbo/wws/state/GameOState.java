@@ -1,4 +1,4 @@
-package com.pbo.wws;
+package com.pbo.wws.state;
 
 import java.awt.Graphics;
 import java.awt.Image;
@@ -7,7 +7,15 @@ import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
 
-public class GameOState extends GameState implements Renderable, Exitable{
+import com.pbo.wws.Exitable;
+import com.pbo.wws.MenuChoicable;
+import com.pbo.wws.Renderable;
+import com.pbo.wws.frame.Main;
+import com.pbo.wws.io.KeyMapper;
+import com.pbo.wws.io.Renderer;
+
+public class GameOState extends GameState implements Renderable, Exitable, MenuChoicable
+{
 	
 	private int currentChoice = 0;
 	private Image image;
@@ -18,8 +26,8 @@ public class GameOState extends GameState implements Renderable, Exitable{
 		this.gsm = gsm;
 		
 		try{
-			image = (Image) ImageIO.read(getClass().getResourceAsStream("/ui/UserInterface/Kalah.png"));
-			BufferedImage imageTombol = ImageIO.read(getClass().getResourceAsStream("/ui/UserInterface/Tombol.png"));
+			image = (Image) ImageIO.read(getClass().getResourceAsStream(Main.resourcePath + "/ui/UserInterface/Kalah.png"));
+			BufferedImage imageTombol = ImageIO.read(getClass().getResourceAsStream(Main.resourcePath + "/ui/UserInterface/Tombol.png"));
 			
 			imageUI[4] = (Image)imageTombol.getSubimage(0, 144, 100, 12).getScaledInstance(300, 36, Image.SCALE_DEFAULT);
 			
@@ -34,7 +42,33 @@ public class GameOState extends GameState implements Renderable, Exitable{
 			e.printStackTrace();
 		}
 	}
-	private void selectChoice() {
+	
+	@Override
+	public void moveChoice(int keyCode) 
+	{
+		if(KeyMapper.KEY_ENTER == keyCode){
+			System.out.println("ENTER");
+			selectChoice();
+			}
+		if(KeyMapper.KEY_UP == keyCode){
+			KeyMapper.confirmArrow();
+			System.out.println("UP");
+			currentChoice--;
+			if(currentChoice == -1){
+				currentChoice = imageUI.length/ 2 - 1;
+			}
+		}
+		if(KeyMapper.KEY_DOWN == keyCode){
+			KeyMapper.confirmArrow();
+			System.out.println("DOWN");
+			currentChoice++;
+			if(currentChoice == imageUI.length/ 2){
+				currentChoice = 0;
+			}
+		}
+	}
+	
+	public void selectChoice() {
 		if(currentChoice == 0){
 			setVisible(false);
 			GameStateManager.setState(GameStateManager.PLAYSTATE);
@@ -50,35 +84,20 @@ public class GameOState extends GameState implements Renderable, Exitable{
 		setVisible(true);
 	}
 
-	@Override
-	public void keyPressed(int k) {
-
-		if(k == KeyEvent.VK_ENTER){
-			selectChoice();
-			}
-		if(k == KeyEvent.VK_UP){
-			System.out.println("Ke atas");
-			currentChoice--;
-			if(currentChoice == -1){
-				currentChoice = imageUI.length/ 2 - 1;
-			}
-		}
-		if(k == KeyEvent.VK_DOWN){
-			System.out.println("Ke bawah");
-			currentChoice++;
-			if(currentChoice == imageUI.length/ 2){
-				currentChoice = 0;
-			}
-		}
-		
-	}
-
-	@Override
-	public void keyReleased(int k) {
-		
-	}
-	@Override
 	public void render(Graphics g) {
+		
+		if(KeyMapper.isPressed(KeyMapper.KEY_UP)){
+			KeyMapper.confirmArrow();
+			moveChoice(KeyMapper.KEY_UP);
+		}
+		else if(KeyMapper.isPressed(KeyMapper.KEY_DOWN)){
+			KeyMapper.confirmArrow();
+			moveChoice(KeyMapper.KEY_DOWN);
+		}
+		else if(KeyMapper.isPressed(KeyMapper.KEY_ENTER)){
+			KeyMapper.confirmEnter();
+			moveChoice(KeyMapper.KEY_ENTER);
+		}
 
 		g.drawImage(image, 0, 0, 1280, 720, null);
 		g.drawImage(imageUI[4],50,50,null);
@@ -111,9 +130,9 @@ public class GameOState extends GameState implements Renderable, Exitable{
 
 	@Override
 	public void quit() {
-
 		setVisible(false);
 		GameStateManager.setState(GameStateManager.MENUSTATE);
 	}
+
 
 }

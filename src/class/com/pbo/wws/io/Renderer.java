@@ -1,4 +1,4 @@
-package com.pbo.wws;
+package com.pbo.wws.io;
 
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
@@ -8,11 +8,15 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import com.pbo.wws.Renderable;
+
+@SuppressWarnings("serial")
 public class Renderer extends JPanel implements ActionListener{
 
 	private static ArrayList<Renderable> drawables;
 
 	public Renderer() {
+		System.out.println("[Renderer] Test");
 		if (Renderer.drawables == null) {
 			Renderer.drawables = new ArrayList<Renderable>();
 			this.setFocusable(true);
@@ -40,6 +44,7 @@ public class Renderer extends JPanel implements ActionListener{
 	public static void addDrawable(Renderable d) {
 		if (Renderer.drawables != null) {
 			Renderer.drawables.add(d);			
+			return;
 		}
 		
 		System.out.println("[Renderer] Renderer belum diinstansiasi!");
@@ -48,6 +53,7 @@ public class Renderer extends JPanel implements ActionListener{
 	public static void addDrawable(int index, Renderable d) {
 		if (Renderer.drawables != null) {
 			Renderer.drawables.add(index, d);
+			return;
 		}
 		
 		System.out.println("[Renderer] Renderer belum diinstansiasi!");

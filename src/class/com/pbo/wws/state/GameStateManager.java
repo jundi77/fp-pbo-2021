@@ -1,6 +1,9 @@
-package com.pbo.wws;
+package com.pbo.wws.state;
 
 import java.util.ArrayList;
+
+import com.pbo.wws.EndState;
+import com.pbo.wws.io.KeyWatcher;
 
 
 public class GameStateManager
@@ -20,14 +23,17 @@ public class GameStateManager
 	
 	public GameStateManager()
 	{
-		gameStates = new ArrayList <GameState>();
-		currentState = MENUSTATE;
-		gameStates.add(new MenuState(this));
-		gameStates.add(new PlayState(this));
-		gameStates.add(new PauseState(this));
-		gameStates.add(new BattleState(this));
-		gameStates.add(new GameOState(this));
-		gameStates.add(new EndState(this));
+//		gameStates = new ArrayList <GameState>();
+//		gameStates.add(new MenuState(this));
+//		gameStates.add(new PlayState(this));
+//		gameStates.add(new PauseState(this));
+//		gameStates.add(new BattleState(this));
+//		gameStates.add(new GameOState(this));
+//		gameStates.add(new EndState(this));
+//		
+//		setState(PLAYSTATE);
+		
+		(new BattleState(this)).init();
 	}
 
 	//terbuka untuk public(class lain)
@@ -35,19 +41,8 @@ public class GameStateManager
 	public static void setState(int state)
 	{
 		currentState = state;
-		System.out.println("Pindah State");
+		System.out.println("[GameStateManager] Pindah State");
 		gameStates.get(currentState).init();
 	}
-	
-	public void keyPressed(int k) 
-	{
-		gameStates.get(currentState).keyPressed(k);
-	}
-	
-	public void keyReleased(int k) 
-	{
-		gameStates.get(currentState).keyReleased(k);
-	}
-	
 
 }
