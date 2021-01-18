@@ -9,12 +9,13 @@ import javax.imageio.ImageIO;
 
 import com.pbo.wws.Exitable;
 import com.pbo.wws.MenuChoicable;
-import com.pbo.wws.Renderable;
+import com.pbo.wws.io.Renderable;
 import com.pbo.wws.frame.Main;
 import com.pbo.wws.io.KeyMapper;
 import com.pbo.wws.io.Renderer;
+import com.pbo.wws.state.manager.GameStateManager;
 
-public class GameOState extends GameState implements Renderable, Exitable, MenuChoicable
+public class GameOState extends GameState implements Exitable, MenuChoicable
 {
 	
 	private int currentChoice = 0;
@@ -41,6 +42,8 @@ public class GameOState extends GameState implements Renderable, Exitable, MenuC
 		}catch(Exception e){
 			e.printStackTrace();
 		}
+		
+		Renderer.addDrawable(this);
 	}
 	
 	@Override
@@ -76,12 +79,6 @@ public class GameOState extends GameState implements Renderable, Exitable, MenuC
 		if(currentChoice == 1){
 			quit();
 		}
-	}	
-
-	@Override
-	public void init() {
-
-		setVisible(true);
 	}
 
 	public void render(Graphics g) {
@@ -112,20 +109,12 @@ public class GameOState extends GameState implements Renderable, Exitable, MenuC
 		}
 	}
 	
-	
 	@Override
 	public void setVisible(boolean visible) {
-
-		if(visible == false)
-			Renderer.removeDrawable(this);
-		else
-			Renderer.addDrawable(this);
-	}
-
-	@Override
-	public boolean getVisibility() {
-
-		return false;
+		if (visible) {
+			System.out.println("[GameOState] Pindah ke aku");
+		}
+		super.setVisible(visible);
 	}
 
 	@Override

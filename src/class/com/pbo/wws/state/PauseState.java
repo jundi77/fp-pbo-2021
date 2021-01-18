@@ -9,15 +9,16 @@ import javax.imageio.ImageIO;
 
 import com.pbo.wws.Exitable;
 import com.pbo.wws.MenuChoicable;
-import com.pbo.wws.Renderable;
+import com.pbo.wws.io.Renderable;
 import com.pbo.wws.frame.Main;
 import com.pbo.wws.io.KeyMapper;
 import com.pbo.wws.io.Renderer;
+import com.pbo.wws.state.manager.GameStateManager;
 
-public class PauseState extends GameState implements Renderable, Exitable, MenuChoicable
+public class PauseState extends GameState implements Exitable, MenuChoicable
 {
 	
-	private int currentChoice = 0;
+	private int currentChoice = 0, resumeTo = GameStateManager.PLAYSTATE;
 	private Image image;
 	private Image[] imageUI = new Image[5];
 	
@@ -41,15 +42,26 @@ public class PauseState extends GameState implements Renderable, Exitable, MenuC
 		}catch(Exception e){
 			e.printStackTrace();
 		}
+		
+		Renderer.addDrawable(this);
+	}
+
+	public int getResumeTo() {
+		return resumeTo;
+	}
+
+	public void setResumeTo(int resumeTo) {
+		this.resumeTo = resumeTo;
 	}
 
 	@Override
-	public void moveChoice(int keyCode) {
-		
+	public void moveChoice() {
 		if(KeyMapper.isPressed(KeyMapper.KEY_ENTER)){
+			KeyMapper.confirmEnter();
 			selectChoice();
 			}
 		if(KeyMapper.isPressed(KeyMapper.KEY_UP)){
+			KeyMapper.confirmArrow();
 			System.out.println("Ke atas");
 			currentChoice--;
 			if(currentChoice == -1){
@@ -57,50 +69,31 @@ public class PauseState extends GameState implements Renderable, Exitable, MenuC
 			}
 		}
 		if(KeyMapper.isPressed(KeyMapper.KEY_DOWN)){
+			KeyMapper.confirmArrow();
 			System.out.println("Ke bawah");
 			currentChoice++;
 			if(currentChoice == imageUI.length/ 2){
 				currentChoice = 0;
 			}
 		}
-		
 	}
-	
+
 	public void selectChoice() {
-		if(currentChoice == 0){
-			setVisible(false);
-			//if(array monster kosong)
-			GameStateManager.setState(GameStateManager.PLAYSTATE);
-			//else if (jika array monster ada)
-			GameStateManager.setState(GameStateManager.BATTLESTATE);
-		}
-		if(currentChoice == 1){
+		switch (currentChoice) {
+		case 0:
+			GameStateManager.setState(this.resumeTo);
+			break;
+		case 1:
 			quit();
+			break;
+		default:
+			break;
 		}
-	}
-	
-	@Override
-	public void init() {
-		
-		setVisible(true);
 	}
 
 	@Override
 	public void render(Graphics g) {
-
-		if(KeyMapper.isPressed(KeyMapper.KEY_UP)){
-			KeyMapper.confirmArrow();
-			moveChoice(KeyMapper.KEY_UP);
-		}
-		else if(KeyMapper.isPressed(KeyMapper.KEY_DOWN)){
-			KeyMapper.confirmArrow();
-			moveChoice(KeyMapper.KEY_DOWN);
-		}
-		else if(KeyMapper.isPressed(KeyMapper.KEY_ENTER)){
-			KeyMapper.confirmEnter();
-			moveChoice(KeyMapper.KEY_ENTER);
-		}
-			
+		moveChoice();
 		g.drawImage(image, 0, 0, 1280, 720, null);
 		g.drawImage(imageUI[4],100,50,null);
 		for(int options = 0; options < ((imageUI.length - 1) / 2); options++)
@@ -116,25 +109,14 @@ public class PauseState extends GameState implements Renderable, Exitable, MenuC
 
 	@Override
 	public void setVisible(boolean visible) {
-		if(visible == false)
-			Renderer.removeDrawable(this);
-		else
-			Renderer.addDrawable(this);
-	}
-
-	@Override
-	public boolean getVisibility() {
-
-		return false;
+		if (visible) {
+			System.out.println("[PauseState] Pindah ke aku");
+		}
+		super.setVisible(visible);
 	}
 
 	@Override
 	public void quit() {
-
-		setVisible(false);
 		GameStateManager.setState(GameStateManager.MENUSTATE);
 	}
-
-
-
 }

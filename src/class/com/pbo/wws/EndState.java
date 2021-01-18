@@ -16,7 +16,7 @@ import com.pbo.wws.io.Renderer;
 import com.pbo.wws.state.GameState;
 import com.pbo.wws.state.GameStateManager;
 
-public class EndState extends GameState implements Renderable, Exitable
+public class EndState extends GameState implements Exitable
 {
 	private Image image;
 	private Image imageUI;
@@ -32,12 +32,7 @@ public class EndState extends GameState implements Renderable, Exitable
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-	}
-
-	@Override
-	public void init() {
-
-		setVisible(true);
+		Renderer.addDrawable(this);
 	}
 
 	@Override
@@ -48,7 +43,6 @@ public class EndState extends GameState implements Renderable, Exitable
 	
 	@Override
 	public void render(Graphics g) {
-		
 		if(KeyMapper.isPressed(KeyMapper.KEY_ENTER))
 			quit();
 		
@@ -58,16 +52,9 @@ public class EndState extends GameState implements Renderable, Exitable
 	
 	@Override
 	public void setVisible(boolean visible) {
-
-		if(visible == false)
-			Renderer.removeDrawable(this);
-		else
-			Renderer.addDrawable(this);
-	}
-	
-	@Override
-	public boolean getVisibility() {
-
-		return false;
+		if (visible) {
+			System.out.println("[EndState] Pindah ke aku");
+		}
+		super.setVisible(visible);
 	}
 }

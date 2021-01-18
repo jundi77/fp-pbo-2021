@@ -21,19 +21,20 @@ import com.pbo.wws.io.KeyMapper;
 import com.pbo.wws.io.Renderable;
 import com.pbo.wws.io.Renderer;
 import com.pbo.wws.state.manager.GameStateManager;
-import com.pbo.wws.Renderable;
+import com.pbo.wws.io.Renderable;
 import com.pbo.wws.io.KeyMapper;
 import com.pbo.wws.io.Renderer;
 
-public class PlayState extends GameState implements  Renderable
+public class PlayState extends GameState 
 {
-	Place p;
-	Player c;
-	Enemy e;
+	private Place p;
+	private Player c;
+	private Enemy e;
 
 	@SuppressWarnings("serial")
 	public PlayState (GameStateManager gsm)
 	{
+		this.gsm = gsm;
 		try {
 			c = new Player("main", "spriteUtama(32x32).png", 120, 120, 32, 32, Main.getWidth() / 2, Main.getHeight() / 2);
 		} catch (CharacterException e1) {
@@ -73,69 +74,53 @@ public class PlayState extends GameState implements  Renderable
 				// checkpoint ??
 				put(66, new Integer[] {Place.IS_CHECKPOINT});
 			}}, 82, 0, 0, c);
-			Renderer.addDrawable(p);
 		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SAXException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		try {
 			e = new Enemy("monster", "monsterBerdiri.png", 120, 120, -120, -120);
-//			e.setX(60);
-//			e.setY(60);
-			p.addEnemy(e, 79);
+			
+			// TODO tambah enemy yang lain
+			p.addEnemy(e, 99); // TODO tambah direction lihat ke mana
 		} catch (CharacterException | IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			System.exit(1);
 		}
 
-//		e.setDirection(Character.DIRECTION_UP); // faulty
-		Renderer.addDrawable(c);
-		this.gsm = gsm;
-	}
-	
-	@Override
-	public void init() {
-
-		System.out.println("[PlayState] State changed to me!");
-		setVisible(true);
+//		TODO e.setDirection(Character.DIRECTION_UP); // Perbaiki direction monster
+		Renderer.addDrawable(this);
 	}
 
-	public int y = 100, x = 100;
 	@Override
 	public void render(Graphics g) {
-		g.setColor(Color.BLACK);
-		if (KeyMapper.isPressed(KeyMapper.KEY_W)) {
-			y -= 3;
-		} else if (KeyMapper.isPressed(KeyMapper.KEY_S)) {
-			y += 3;
-		} else if (KeyMapper.isPressed(KeyMapper.KEY_A)) {
-			x -= 3;
-		} else if (KeyMapper.isPressed(KeyMapper.KEY_D)) {
-			x += 3;
+		keyWatcher();
+		p.render(g);
+		c.render(g);
+	}
+
+	public void keyWatcher() {
+		if (KeyMapper.isPressed(KeyMapper.KEY_ESCAPE)) {
+			KeyMapper.confirmEscape();
+			quit();
 		}
-		g.drawRect(x, y, 300, 300);
 	}
 
 	@Override
 	public void setVisible(boolean visible) {
-		if(!visible) {
-			Renderer.removeDrawable(this);			
-		} else {
-			Renderer.addDrawable(this);			
+		if (visible) {
+			System.out.println("[PlayState] Pindah ke aku");
 		}
+		super.setVisible(visible);
 	}
 
-	@Override
-	public boolean getVisibility() {
-		return Renderer.isListed((Renderable) this);
+	private void quit() {
+		((PauseState) gsm.getState(gsm.PAUSESTATE)).setResumeTo(gsm.PLAYSTATE);
+		gsm.setState(gsm.PAUSESTATE);
 	}
 
 }

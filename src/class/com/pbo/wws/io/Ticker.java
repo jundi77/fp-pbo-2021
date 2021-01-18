@@ -86,7 +86,8 @@ public class Ticker {
 		
 	}
 
-	public static void setRatePerSecond(int ratePerSecond) {
-		Ticker.RATE_PER_SECOND = ratePerSecond;
+	
+	public static int getRatePerSecond() {
+		return Ticker.RATE_PER_SECOND;
 	}
 }

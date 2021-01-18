@@ -12,23 +12,23 @@ public interface Movable{
 	public default int getDirection() {
 		return DIRECTION_DOWN;
 	}
-	
+
 	public default void setDirection(int direction) {
 		return;
 	}
-	
+
 	public default int getXSpeed() {
 		return 0;
 	}
-	
+
 	public default void setXSpeed(int speed) {
 		return;
 	}
-	
+
 	public default int getYSpeed() {
 		return 0;
 	}
-	
+
 	public default void setYSpeed(int speed) {
 		return;
 	}

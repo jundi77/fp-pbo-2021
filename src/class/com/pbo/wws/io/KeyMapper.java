@@ -26,64 +26,54 @@ public class KeyMapper extends KeyAdapter{
 		case KeyEvent.VK_KP_UP:
 			if (!keyPressedFlag[KEY_UP] && !arrowConfirmed) {
 				keyPressedFlag[KEY_UP] = true;
-				System.out.println("[KeyMapper] UP");				
 			}
 			break;
 		case KeyEvent.VK_DOWN:
 		case KeyEvent.VK_KP_DOWN:
 			if (!keyPressedFlag[KEY_DOWN] && !arrowConfirmed) {
-				keyPressedFlag[KEY_DOWN] = true;
-				System.out.println("[KeyMapper] DOWN");				
+				keyPressedFlag[KEY_DOWN] = true;		
 			}
 			break;
 		case KeyEvent.VK_LEFT:
 		case KeyEvent.VK_KP_LEFT:
 			if (!keyPressedFlag[KEY_LEFT] && !arrowConfirmed) {
-				keyPressedFlag[KEY_LEFT] = true;
-				System.out.println("[KeyMapper] LEFT");				
+				keyPressedFlag[KEY_LEFT] = true;		
 			}
 			break;
 		case KeyEvent.VK_RIGHT:
 		case KeyEvent.VK_KP_RIGHT:
 			if (!keyPressedFlag[KEY_RIGHT] && !arrowConfirmed) {
-				keyPressedFlag[KEY_RIGHT] = true;
-				System.out.println("[KeyMapper] RIGHT");				
+				keyPressedFlag[KEY_RIGHT] = true;			
 			}
 			break;
 		case KeyEvent.VK_W:
 			if (!keyPressedFlag[KEY_W]) {
-				keyPressedFlag[KEY_W] = true;
-				System.out.println("[KeyMapper] W");				
+				keyPressedFlag[KEY_W] = true;		
 			}
 			break;
 		case KeyEvent.VK_A:
 			if (!keyPressedFlag[KEY_A]) {
-				keyPressedFlag[KEY_A] = true;
-				System.out.println("[KeyMapper] A");				
+				keyPressedFlag[KEY_A] = true;	
 			}
 			break;
 		case KeyEvent.VK_S:
 			if (!keyPressedFlag[KEY_S]) {				
 				keyPressedFlag[KEY_S] = true;
-				System.out.println("[KeyMapper] S");
 			}
 			break;
 		case KeyEvent.VK_D:
 			if (!keyPressedFlag[KEY_D]) {
-				keyPressedFlag[KEY_D] = true;
-				System.out.println("[KeyMapper] D");				
+				keyPressedFlag[KEY_D] = true;		
 			}
 			break;
 		case KeyEvent.VK_ENTER:
 			if (!keyPressedFlag[KEY_ENTER] && !enterConfirmed) {
-				keyPressedFlag[KEY_ENTER] = true;
-				System.out.println("[KeyMapper] ENTER");				
+				keyPressedFlag[KEY_ENTER] = true;			
 			}
 			break;
 		case KeyEvent.VK_ESCAPE:
 			if (!keyPressedFlag[KEY_ESCAPE] && !escapeConfirmed) {
 				keyPressedFlag[KEY_ESCAPE] = true;
-				System.out.println("[KeyMapper] ESCAPE");
 			}
 			break;
 		default:
@@ -98,51 +88,41 @@ public class KeyMapper extends KeyAdapter{
 		case KeyEvent.VK_KP_UP:
 			keyPressedFlag[KEY_UP] = false;
 			arrowConfirmed = false;
-			System.out.println("[KeyMapper] UP RELEASED");
 			break;
 		case KeyEvent.VK_DOWN:
 		case KeyEvent.VK_KP_DOWN:
 			keyPressedFlag[KEY_DOWN] = false;
 			arrowConfirmed = false;
-			System.out.println("[KeyMapper] DOWN RELEASED");
 			break;
 		case KeyEvent.VK_LEFT:
 		case KeyEvent.VK_KP_LEFT:
 			keyPressedFlag[KEY_LEFT] = false;
 			arrowConfirmed = false;
-			System.out.println("[KeyMapper] LEFT RELEASED");
 			break;
 		case KeyEvent.VK_RIGHT:
 		case KeyEvent.VK_KP_RIGHT:
 			keyPressedFlag[KEY_RIGHT] = false;
 			arrowConfirmed = false;
-			System.out.println("[KeyMapper] RIGHT RELEASED");
 			break;
 		case KeyEvent.VK_W:
 			keyPressedFlag[KEY_W] = false;
-			System.out.println("[KeyMapper] W RELEASED");
 			break;
 		case KeyEvent.VK_A:
 			keyPressedFlag[KEY_A] = false;
-			System.out.println("[KeyMapper] A RELEASED");
 			break;
 		case KeyEvent.VK_S:
 			keyPressedFlag[KEY_S] = false;
-			System.out.println("[KeyMapper] S RELEASED");
 			break;
 		case KeyEvent.VK_D:
 			keyPressedFlag[KEY_D] = false;
-			System.out.println("[KeyMapper] D RELEASED");
 			break;
 		case KeyEvent.VK_ENTER:
 			keyPressedFlag[KEY_ENTER] = false;
 			enterConfirmed = false;
-			System.out.println("[KeyMapper] ENTER RELEASED");
 			break;
 		case KeyEvent.VK_ESCAPE:
 			keyPressedFlag[KEY_ESCAPE] = false;
 			escapeConfirmed = false;
-			System.out.println("[KeyMapper] ESCAPE RELEASED");
 			break;
 		default:
 			break;

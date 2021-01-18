@@ -2,11 +2,13 @@ package com.pbo.wws.entity;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.HashMap;
 
 import com.pbo.wws.frame.Main;
 import com.pbo.wws.io.KeyMapper;
+import com.pbo.wws.io.Ticker;
 
-public class Player extends MagicCharacter{
+public class Player extends MagicCharacter {
 
 	public Player(String name,
 				  String spriteImgFileName,
@@ -25,12 +27,31 @@ public class Player extends MagicCharacter{
 		this.setX(x);
 		this.setY(y);
 		
-		this.setTotalMovement(5);
+		this.setTotalMovement(5 * Ticker.getRatePerSecond() / 12);
 
+		this.setAttacks(new HashMap<String, Integer>() {{
+			put("default", 10);
+		}});
 		
+		/**
+		 * [0] = cost mp
+		 * [1] = damage
+		 */
+		this.setSpells(new HashMap<String, Integer[]>(){{
+			put("armor",   new Integer[] {25, 10});
+			put("burning", new Integer[] {25, 25});
+			put("college", new Integer[] {25, 25});
+			put("defence", new Integer[] {0, 0});
+			put("element", new Integer[] {75, 1000});
+		}});
+		
+		this.setFullHealth(150);
+		this.setHealth(150);
+		this.setFullMp(100);
+		this.setMp(100);
 	}
 
-	public void keyMovementWatcher() {
+	public boolean keyMovementWatcher() {
 		if (KeyMapper.isPressed(KeyMapper.KEY_W)) {
 			this.setDirection(DIRECTION_UP);
 			this.incrementMovement();
@@ -43,40 +64,30 @@ public class Player extends MagicCharacter{
 		}  else if (KeyMapper.isPressed(KeyMapper.KEY_D)) {
 			this.setDirection(DIRECTION_RIGHT);
 			this.incrementMovement();
+		} else {
+			return false;
 		}
 
-		System.out.println("[Player]: x=" + this.getX() + " y=" + this.getY());
+		return true;
 	}
+
 	@Override
 	public void render(Graphics g) {
-		keyMovementWatcher();
+		if(!keyMovementWatcher()) {
+			this.setMovement((this.getTotalMovement() / 5) * 2);
+		};
 		
 		// gambar bound
 		g.setColor(Color.RED);
 		g.drawRect(this.getX(), this.getY(), this.getWidth(), this.getHeight());
 		
+		//System.out.println(this.getMovement());
 		// gambar sprite
 		g.drawImage(this.getSprite(),
 					this.getX(), this.getY(),
 					this.getX() + this.getWidth(), this.getY() + this.getHeight(), 
-					this.getSrcWidth() * this.getMovement(), this.getSrcHeight() * this.getDirection(), 
-					this.getSrcWidth() * (this.getMovement() + 1), this.getSrcHeight() * (this.getDirection() + 1),
+					this.getSrcWidth() * (this.getMovement() / (Ticker.getRatePerSecond() / 12)), this.getSrcHeight() * this.getDirection(), 
+					this.getSrcWidth() * (this.getMovement() / (Ticker.getRatePerSecond() / 12) + 1), this.getSrcHeight() * (this.getDirection() + 1),
 					null, null);
-	}
-
-	@Override
-	public void attack() {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void getDamage() {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void doSpell(String spell, FightingCharacter opponent) {
-		// TODO Auto-generated method stub
-		
 	}
 }

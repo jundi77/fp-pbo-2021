@@ -2,10 +2,14 @@ package com.pbo.wws.entity;
 
 import java.util.HashMap;
 
+import com.pbo.wws.entity.FightingCharacter.FightingCharacterException;
+
 public abstract class FightingCharacter extends Character implements CanAttack {
 	private HashMap<String, Integer> attacks; // menyimpan attack yang bisa dilakukan dan damagenya
 	private int health, fullHealth,
-				// VV tidak dipakai karena belum ada sistem level
+				// tidak dipakai karena belum ada sistem level
+				// ||
+				// VV
 				damageBonus, exp,
 				levelStatus;
 
@@ -30,7 +34,11 @@ public abstract class FightingCharacter extends Character implements CanAttack {
 		return health;
 	}
 
-	public void setHealth(int health) {
+	public void setHealth(int health) throws FightingCharacterException {
+		if (health > fullHealth) {
+			throw new FightingCharacterException("[FightingCharacter] health melebihi full health");
+		}
+
 		this.health = health;
 	}
 
@@ -38,49 +46,33 @@ public abstract class FightingCharacter extends Character implements CanAttack {
 		return fullHealth;
 	}
 
-	public void setFullHealth(int fullHealth) {
+	public void setFullHealth(int fullHealth) throws FightingCharacterException {
+		if (health > fullHealth) {
+			throw new FightingCharacterException("[FightingCharacter] health melebihi full health");
+		}
+
 		this.fullHealth = fullHealth;
 	}
 
-	public int getDamageBonus() {
-		return damageBonus;
-	}
-
-	public void setDamageBonus(int damageBonus) {
-		this.damageBonus = damageBonus;
-	}
-
-	public int getExp() {
-		return exp;
-	}
-
-	public void setExp(int exp) {
-		this.exp = exp;
-	}
-
-	public int getLevelStatus() {
-		return levelStatus;
-	}
-
-	public void setLevelStatus(int levelStatus) {
-		this.levelStatus = levelStatus;
+	@Override
+	public void attack(String attackName, CanAttack target) {
+		Integer damage = this.attacks.get(attackName);
+		if (damage != null) {
+			target.getDamage(damage);
+		}
 	}
 
 	@Override
-	public void attack() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void getDamage() {
-		// TODO Auto-generated method stub
-		
+	public void getDamage(int damage) {
+		if (this.health > 0)  {
+			this.health -= damage;
+			this.health = (this.health < 0)? 0 : this.health;
+		}
 	}
 
 	// Custom exception untuk fighting character
 	@SuppressWarnings("serial")
-	public class FightingCharacterException extends Exception {
+	public class FightingCharacterException extends CharacterException {
 		public FightingCharacterException(String message) {
 			super(message);
 		}

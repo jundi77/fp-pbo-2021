@@ -43,12 +43,9 @@ public abstract class Character implements Renderable, Movable {
 		}
 	}
 
-	@Override
-	public void render(Graphics g) {
-		g.drawImage(sprite, x, y, x + width, y + height
-					, this.srcWidth * this.movement, this.srcHeight * this.direction				// di layar
-					, this.srcWidth * (this.movement + 1), this.srcHeight * (this.direction + 1)	// di sumber gambar sprite
-					, null, null);
+
+	public String getName() {
+		return this.name;
 	}
 
 	@Override
@@ -187,9 +184,7 @@ public abstract class Character implements Renderable, Movable {
 		this.direction = direction;
 	}
 
-	public String getName() {
-		return this.name;
-	}
+	public abstract void render(Graphics g);
 
 	// Custom exception untuk karakter
 	@SuppressWarnings("serial") 

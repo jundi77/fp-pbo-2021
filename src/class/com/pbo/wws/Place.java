@@ -23,6 +23,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import com.pbo.wws.entity.Character;
+import com.pbo.wws.entity.Enemy;
 import com.pbo.wws.entity.FightingCharacter;
 import com.pbo.wws.entity.Movable;
 import com.pbo.wws.frame.Main;
@@ -180,7 +181,7 @@ public class Place implements Renderable, Movable{
 		}
 		
 		
-//		System.out.println("[Place] " + this.x + "," + this.y);
+//		//System.out.println("[Place] " + this.x + "," + this.y);
 		int[][] firstLayer = layers.get(0);
 		for (int i = 0; i < firstLayer.length; ++i) {
 			for (int j = 0; j < firstLayer[i].length; ++j) {
@@ -208,6 +209,9 @@ public class Place implements Renderable, Movable{
 				if (e != null) {
 					e.setX(dx1 - this.width / 2);
 					e.setY(dy1 - this.height / 2);
+					if (!((Enemy) e).isAnimating() && this.getCurrentTile() == 79) {
+						((Enemy) e).playAnimation("serang");
+					};
 					e.render(g);
 				}
 			}
@@ -233,7 +237,7 @@ public class Place implements Renderable, Movable{
 				g.fillRect(this.x + (ulCurrentCol - 1 + j) * this.width, this.y + (ulCurrentRow + i) * this.height, this.width, this.height);
 				FightingCharacter e = this.enemies.get(ulCurrentCol + j + (ulCurrentRow + i) * this.mapWidth);
 				if (e != null) {
-					System.out.println("[Place] enemy detected");
+					//System.out.println("[Place] enemy detected");
 				}
 			}
 		}
@@ -251,7 +255,7 @@ public class Place implements Renderable, Movable{
 		int distanceToUp = Main.getHeight() / 2 - ulDiffY;
 		int distanceToDown = drDiffY - Main.getHeight() / 2 - player.getHeight() / 2;
 
-		System.out.println(this.getCurrentTile());
+		//System.out.println(this.getCurrentTile());
 	}
 
 	protected int getCurrentTile() {
@@ -296,7 +300,7 @@ public class Place implements Renderable, Movable{
 		int distanceToUp = Main.getHeight() / 2 - ulDiffY;
 		int distanceToDown = drDiffY - Main.getHeight() / 2 - player.getHeight() / 2;
 		
-		System.out.println("[Place] dToL=" + distanceToLeft);
+		//System.out.println("[Place] dToL=" + distanceToLeft);
 
 		// cek left/right
 		// left
@@ -317,7 +321,7 @@ public class Place implements Renderable, Movable{
 			for (Integer t : leftTileDetails) {
 				if (t == Place.IS_WALL || t == Place.WALL_LEFT) {
 					if ((distanceToLeft < 0 && currentTile == leftTileToBeChecked)? distanceToLeft >= -5 : distanceToLeft <= 5 && distanceToLeft >= 0) {
-						System.out.println("[Place] Collide left");
+						//System.out.println("[Place] Collide left");
 						this.x -= 3;
 						horCollideFound = true;
 					}
@@ -333,7 +337,7 @@ public class Place implements Renderable, Movable{
 					for (Integer t : leftTileDetails) {
 						if (t == Place.IS_WALL || t == Place.WALL_LEFT) {
 							if ((distanceToLeft < 0 && currentTile == leftTileToBeChecked)? distanceToLeft >= -5 : distanceToLeft <= 5 && distanceToLeft >= 0) {
-								System.out.println("[Place] Collide left bottom");
+								//System.out.println("[Place] Collide left bottom");
 								this.x -= 3;
 								horCollideFound = true;
 							}
@@ -359,7 +363,7 @@ public class Place implements Renderable, Movable{
 				for (Integer t : rightTileDetails) {
 					if (t == Place.IS_WALL || t == Place.WALL_RIGHT) {
 						if ((distanceToRight < 0 && currentTile == rightTileToBeChecked)? distanceToRight >= -5 : distanceToRight <= 5 && distanceToRight >= 0) {
-							System.out.println("[Place] Collide right");
+							//System.out.println("[Place] Collide right");
 							this.x += 3;
 							horCollideFound = true;
 						}
@@ -375,7 +379,7 @@ public class Place implements Renderable, Movable{
 						for (Integer t : rightTileDetails) {
 							if (t == Place.IS_WALL || t == Place.WALL_RIGHT) {
 								if ((distanceToRight < 0 && currentTile == rightTileToBeChecked)? distanceToRight >= -5 : distanceToRight <= 5 && distanceToRight >= 0) {
-									System.out.println("[Place] Collide right");
+									//System.out.println("[Place] Collide right");
 									this.x += 3;
 									horCollideFound = true;
 								}
@@ -402,7 +406,7 @@ public class Place implements Renderable, Movable{
 			for (Integer t : bottomTileDetails) {
 				if (t == Place.IS_WALL || t == Place.WALL_DOWN) {
 					if ((distanceToDown < 0 && currentTile == bottomTileToBeChecked)? distanceToDown >= -10 : distanceToDown <= 10 && distanceToDown >= 0) {
-						System.out.println("[Place] Collide bottom");
+						//System.out.println("[Place] Collide bottom");
 						this.y += 3;
 						vertCollideFound = true;
 					}
@@ -414,7 +418,7 @@ public class Place implements Renderable, Movable{
 				if (bottomTileLeft < this.mapWidth * this.mapHeight) {
 					bottomTile = this.layers.get(0)[this.getRowFromTile(bottomTileLeft) - 1]
 												   [this.getColFromTile(bottomTileLeft) - 1];
-//					System.out.println("[Place] botleft=" + bottomTile);
+//					//System.out.println("[Place] botleft=" + bottomTile);
 					bottomTileDetails = this.tileDetails.get(bottomTile - 1);
 					if (bottomTileDetails != null)
 					for (Integer t : bottomTileDetails) {
@@ -464,7 +468,7 @@ public class Place implements Renderable, Movable{
 				for (Integer t : upTileDetails) {
 					if (t == Place.IS_WALL || t == Place.WALL_UP) {
 						if ((distanceToUp < 0 && currentTile == upTileToBeChecked)? distanceToUp >= -10 : distanceToUp <= 10 && distanceToUp >= 0) {
-							System.out.println("[Place] Collide up");
+							//System.out.println("[Place] Collide up");
 							this.y -= 3;
 							vertCollideFound = true;
 						}
@@ -477,13 +481,13 @@ public class Place implements Renderable, Movable{
 					if (upTileLeft < this.mapWidth * this.mapHeight) {
 						upTile = this.layers.get(0)[this.getRowFromTile(upTileLeft) - 1]
 												   [this.getColFromTile(upTileLeft) - 1];
-						System.out.println("[Place] upleft=" + upTile);
+						//System.out.println("[Place] upleft=" + upTile);
 						upTileDetails = this.tileDetails.get(upTile - 1);
 						if (upTileDetails != null)
 						for (Integer t : upTileDetails) {
 							if (t == Place.IS_WALL || t == Place.WALL_UP) {
 								if ((distanceToUp < 0 && currentTile == upTileToBeChecked)? distanceToUp >= -10 : distanceToUp <= 10 && distanceToUp >= 0) {
-									System.out.println("[Place] Collide up left");
+									//System.out.println("[Place] Collide up left");
 									this.y -= 3;
 									vertCollideFound = true;
 								}
@@ -498,13 +502,13 @@ public class Place implements Renderable, Movable{
 					if (upTileRight < this.mapWidth * this.mapHeight) {
 						upTile = this.layers.get(0)[this.getRowFromTile(upTileRight) - 1]
 													   [this.getColFromTile(upTileRight) - 1];
-//						System.out.println("[Place] botleft=" + upTile);
+//						//System.out.println("[Place] botleft=" + upTile);
 						upTileDetails = this.tileDetails.get(upTile - 1);
 						if (upTileDetails != null)
 						for (Integer t : upTileDetails) {
 							if (t == Place.IS_WALL || t == Place.WALL_UP) {
 								if ((distanceToUp < 0 && currentTile == upTileToBeChecked)? distanceToUp >= -10 : distanceToUp <= 10 && distanceToUp >= 0) {
-									System.out.println("[Place] Collide up right");
+									//System.out.println("[Place] Collide up right");
 									this.y -= 3;
 									vertCollideFound = true;
 								}
@@ -521,7 +525,7 @@ public class Place implements Renderable, Movable{
 		for (int i = 0; i < 9; i++) {
 			FightingCharacter e = this.enemies.get(this.getCurrentTile() + (i / 3) * this.mapWidth + (i % 3));
 			if (e != null) {
-				System.out.println("[Place] enemy detected");
+				//System.out.println("[Place] enemy detected");
 			}
 		}
 	}
