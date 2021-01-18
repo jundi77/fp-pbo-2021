@@ -21,6 +21,9 @@ import com.pbo.wws.io.KeyMapper;
 import com.pbo.wws.io.Renderable;
 import com.pbo.wws.io.Renderer;
 import com.pbo.wws.state.manager.GameStateManager;
+import com.pbo.wws.Renderable;
+import com.pbo.wws.io.KeyMapper;
+import com.pbo.wws.io.Renderer;
 
 public class PlayState extends GameState implements  Renderable
 {
@@ -108,7 +111,17 @@ public class PlayState extends GameState implements  Renderable
 	public int y = 100, x = 100;
 	@Override
 	public void render(Graphics g) {
-		
+		g.setColor(Color.BLACK);
+		if (KeyMapper.isPressed(KeyMapper.KEY_W)) {
+			y -= 3;
+		} else if (KeyMapper.isPressed(KeyMapper.KEY_S)) {
+			y += 3;
+		} else if (KeyMapper.isPressed(KeyMapper.KEY_A)) {
+			x -= 3;
+		} else if (KeyMapper.isPressed(KeyMapper.KEY_D)) {
+			x += 3;
+		}
+		g.drawRect(x, y, 300, 300);
 	}
 
 	@Override

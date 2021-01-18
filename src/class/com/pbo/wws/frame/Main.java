@@ -1,7 +1,5 @@
 package com.pbo.wws.frame;
 
-import java.awt.Color;
-
 import javax.swing.JFrame;
 
 import com.pbo.wws.GamePanel;

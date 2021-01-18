@@ -553,4 +553,28 @@ public class Place implements Renderable, Movable{
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	@Override
+	public void setMovingStatus(boolean move) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean getMovingStatus() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void setVisible(boolean visible) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean getVisibility() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

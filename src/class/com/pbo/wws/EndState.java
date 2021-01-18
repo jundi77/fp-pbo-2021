@@ -11,6 +11,10 @@ import com.pbo.wws.io.Renderable;
 import com.pbo.wws.io.Renderer;
 import com.pbo.wws.state.GameState;
 import com.pbo.wws.state.manager.GameStateManager;
+import com.pbo.wws.io.KeyMapper;
+import com.pbo.wws.io.Renderer;
+import com.pbo.wws.state.GameState;
+import com.pbo.wws.state.GameStateManager;
 
 public class EndState extends GameState implements Renderable, Exitable
 {
@@ -37,29 +41,17 @@ public class EndState extends GameState implements Renderable, Exitable
 	}
 
 	@Override
-	public void keyPressed(int k) {
-
-		if(k == KeyEvent.VK_ENTER){
-			quit();
-			}
-	}
-
-	@Override
-	public void keyReleased(int k) {
-
-		
-	}
-
-	@Override
 	public void quit() {
-
 		setVisible(false);
 		GameStateManager.setState(GameStateManager.MENUSTATE);
 	}
 	
 	@Override
 	public void render(Graphics g) {
-
+		
+		if(KeyMapper.isPressed(KeyMapper.KEY_ENTER))
+			quit();
+		
 		g.drawImage(image, 0, 0, 1280, 720, null);
 		g.drawImage(imageUI,100,50,null);
 	}
