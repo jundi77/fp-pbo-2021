@@ -151,14 +151,27 @@ public class KeyMapper extends KeyAdapter{
 	
 	public static boolean isPressed(int key) {
 		if (key >= 0 && key < 10) {
-			return KeyMapper.keyPressedFlag[key];
+			switch (key) {
+			case KEY_UP:
+			case KEY_DOWN:
+			case KEY_LEFT:
+			case KEY_RIGHT:
+				return KeyMapper.keyPressedFlag[key] && !arrowConfirmed;
+			case KEY_ENTER:
+				return KeyMapper.keyPressedFlag[key] && !enterConfirmed;
+			case KEY_ESCAPE:
+				return KeyMapper.keyPressedFlag[key] && !escapeConfirmed;
+			default:
+				return KeyMapper.keyPressedFlag[key];
+			}
 		}
-		
+
+
 		System.out.println("[KeyMapper] [KeyMapper] Key yang kamu cek tidak ada");
 		return false;
 	}
 
-	public static void confirmEnter() {
+	public static synchronized void confirmEnter() {
 		enterConfirmed = true;
 	}
 

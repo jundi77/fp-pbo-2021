@@ -1,8 +1,11 @@
-package com.pbo.wws.state;
+package com.pbo.wws.state.manager;
 
 import java.util.ArrayList;
 
 import com.pbo.wws.EndState;
+import com.pbo.wws.entity.Character.CharacterException;
+import com.pbo.wws.state.GameState;
+import com.pbo.wws.state.PlayState;
 
 
 public class GameStateManager

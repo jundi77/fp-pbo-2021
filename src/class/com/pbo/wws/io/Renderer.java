@@ -1,5 +1,6 @@
 package com.pbo.wws.io;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,7 +9,7 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-import com.pbo.wws.Renderable;
+import com.pbo.wws.frame.Main;
 
 @SuppressWarnings("serial")
 public class Renderer extends JPanel implements ActionListener{
@@ -16,7 +17,8 @@ public class Renderer extends JPanel implements ActionListener{
 	private static ArrayList<Renderable> drawables;
 
 	public Renderer() {
-		System.out.println("[Renderer] Test");
+		setBackground(Color.DARK_GRAY);
+		setSize(Main.getWidth(), Main.getHeight());
 		if (Renderer.drawables == null) {
 			Renderer.drawables = new ArrayList<Renderable>();
 			this.setFocusable(true);
@@ -110,6 +112,9 @@ public class Renderer extends JPanel implements ActionListener{
 		for (Renderable d : drawables) {
 			d.render(g);
 		}
+		g.setColor(Color.RED);
+		g.drawLine(Main.getWidth() / 2, 0, Main.getWidth() / 2, Main.getHeight());
+		g.drawLine(0, Main.getHeight() / 2, Main.getWidth(), Main.getHeight() / 2);
 	}
 
 	@Override

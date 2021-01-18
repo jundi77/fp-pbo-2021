@@ -18,9 +18,10 @@ public class Ticker {
 
 		if (!isTicking()) {
 			Ticker.timer.start();			
+		} else {
+			System.out.println("[Ticker] Ticker sudah berjalan!");
 		}
 		
-		System.out.println("[Ticker] Ticker sudah berjalan!");
 	}
 	
 	public static void start(int ratePerSecond) {

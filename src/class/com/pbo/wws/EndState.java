@@ -7,9 +7,10 @@ import java.awt.event.KeyEvent;
 import javax.imageio.ImageIO;
 
 import com.pbo.wws.frame.Main;
+import com.pbo.wws.io.Renderable;
 import com.pbo.wws.io.Renderer;
 import com.pbo.wws.state.GameState;
-import com.pbo.wws.state.GameStateManager;
+import com.pbo.wws.state.manager.GameStateManager;
 
 public class EndState extends GameState implements Renderable, Exitable
 {

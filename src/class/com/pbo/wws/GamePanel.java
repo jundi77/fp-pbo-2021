@@ -1,15 +1,17 @@
 package com.pbo.wws;
 
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import javax.swing.JPanel;
 
+import com.pbo.wws.frame.Main;
 import com.pbo.wws.io.KeyMapper;
 import com.pbo.wws.io.Renderer;
 import com.pbo.wws.io.Ticker;
-import com.pbo.wws.state.GameStateManager;
+import com.pbo.wws.state.manager.GameStateManager;
 
 @SuppressWarnings("serial")
 public class GamePanel extends JPanel
@@ -27,16 +29,18 @@ public class GamePanel extends JPanel
 	
 	public GamePanel()
 	{
+		setSize(Main.getWidth(), Main.getHeight());
+		setBackground(Color.DARK_GRAY);
+		setLayout(new GridLayout(1, 1, 0, 0));
 		setFocusable(true);
 		requestFocus();
 
-		setLayout(new GridLayout(1, 1, 0, 0));
 		addKeyListener(keyMapper);
 		add(renderer);
 		
 		Ticker.start();
 		Ticker.addActionListener(renderer);
-		
+
 		setVisible(true);
 		init();
 	}
