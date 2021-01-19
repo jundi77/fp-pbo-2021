@@ -1,4 +1,4 @@
-package com.pbo.wws;
+package com.pbo.wws.entity;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -22,11 +22,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import com.pbo.wws.entity.Character;
-import com.pbo.wws.entity.Enemy;
-import com.pbo.wws.entity.FightingCharacter;
-import com.pbo.wws.entity.Movable;
-import com.pbo.wws.entity.Player;
 import com.pbo.wws.frame.Main;
 import com.pbo.wws.io.KeyMapper;
 import com.pbo.wws.io.Renderable;

@@ -1,4 +1,4 @@
-package com.pbo.wws;
+package com.pbo.wws.state;
 
 import java.awt.Graphics;
 import java.awt.Image;
@@ -9,11 +9,9 @@ import javax.imageio.ImageIO;
 import com.pbo.wws.frame.Main;
 import com.pbo.wws.io.Renderable;
 import com.pbo.wws.io.Renderer;
-import com.pbo.wws.state.GameState;
 import com.pbo.wws.state.manager.GameStateManager;
 import com.pbo.wws.io.KeyMapper;
 import com.pbo.wws.io.Renderer;
-import com.pbo.wws.state.GameState;
 import com.pbo.wws.state.manager.GameStateManager;
 
 public class EndState extends GameState implements Exitable

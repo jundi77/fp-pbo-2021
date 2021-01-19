@@ -11,7 +11,7 @@ import java.util.Iterator;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-import com.pbo.wws.GamePanel;
+import com.pbo.wws.frame.GamePanel;
 import com.pbo.wws.frame.Main;
 import com.pbo.wws.io.Renderable;
 
