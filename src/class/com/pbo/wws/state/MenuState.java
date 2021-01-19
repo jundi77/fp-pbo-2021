@@ -60,11 +60,17 @@ public class MenuState extends GameState implements Exitable, MenuChoicable
 			if(currentChoice == -1){
 				currentChoice = tombol.length/ 2 - 1;
 			}
+			if (currentChoice == 1) {
+				currentChoice = 0;
+			}
 		} else if (KeyMapper.isPressed(KeyMapper.KEY_DOWN)) {
 			KeyMapper.confirmArrow();
 			currentChoice++;
 			if(currentChoice == tombol.length/ 2){
 				currentChoice = 0;
+			}
+			if (currentChoice == 1) {
+				currentChoice = 2;
 			}
 		}
 	}
@@ -75,7 +81,7 @@ public class MenuState extends GameState implements Exitable, MenuChoicable
 			GameStateManager.setState(GameStateManager.PLAYSTATE);
 		}
 		if(currentChoice == 1){
-			//loadGame(continue)
+			currentChoice = 2;
 		}
 		if(currentChoice == 2){
 			quit();
@@ -88,10 +94,11 @@ public class MenuState extends GameState implements Exitable, MenuChoicable
 
 		g.drawImage(image, 0, 0, 1280, 720, null);
 		for(int options = 0; options < (tombol.length / 2); options++){
+			if (options == 1) continue; // belum ada fitur load
 			if(options == currentChoice){
-				g.drawImage(tombol[2 * options + 1], 100, 300 + 50 * options, null);
+				g.drawImage(tombol[2 * options + 1], 100, 300 + 50 * ((options == 2)? 1 : 0), null);
 			} else {
-				g.drawImage(tombol[2 * options ], 100, 300 + 50 * options, null);				
+				g.drawImage(tombol[2 * options ], 100, 300 + 50 * ((options == 2)? 1 : 0), null);				
 			}
 		}
 	}
