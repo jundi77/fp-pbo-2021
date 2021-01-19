@@ -137,7 +137,7 @@ public class PlayState extends GameState implements Exitable
 
 	@Override
 	public void quit() {
-		((PauseState) GameStateManager.getState(GameStateManager.PAUSESTATE)).setResumeTo(GameStateManager.BATTLESTATE);
+		((PauseState) GameStateManager.getState(GameStateManager.PAUSESTATE)).setResumeTo(GameStateManager.PLAYSTATE);
 		GameStateManager.setState(GameStateManager.PAUSESTATE);
 	}
 

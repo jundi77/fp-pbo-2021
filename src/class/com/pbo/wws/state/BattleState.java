@@ -262,7 +262,11 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 		player.setMp(player.getMp() - player.getSpells().get(this.playerSpell.get(selectedSpell))[0]);
 		try {
 			enemy.setHealth(enemy.getHealth() - player.getSpells().get(this.playerSpell.get(selectedSpell))[1]);
-			enemy.playAnimation("damaged");
+			if (enemy.getHealth() <= 0) {
+				enemy.playAnimation("mati");
+			} else {
+				enemy.playAnimation("damaged");				
+			}
 			this.currentTurn = 1;
 		} catch (FightingCharacterException e) {
 			// TODO Auto-generated catch block
