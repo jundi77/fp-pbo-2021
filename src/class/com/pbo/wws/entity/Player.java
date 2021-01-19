@@ -30,7 +30,7 @@ public class Player extends MagicCharacter {
 		this.setTotalMovement(5 * Ticker.getRatePerSecond() / 12);
 
 		this.setAttacks(new HashMap<String, Integer>() {{
-			put("default", 100);
+			put("default", 15);
 		}});
 		
 		/**
