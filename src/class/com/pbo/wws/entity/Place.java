@@ -23,6 +23,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import com.pbo.wws.entity.FightingCharacter.FightingCharacterException;
+
 import com.pbo.wws.frame.Main;
 import com.pbo.wws.io.KeyMapper;
 import com.pbo.wws.io.Renderable;
@@ -88,7 +89,7 @@ public class Place implements Renderable, Movable{
 	 */
 	public Place(String name, HashMap<Integer, Integer[]> tileDetails, int tileDisplayedSize, int xUpperLeft, int yUpperLeft, Character player) throws ParserConfigurationException, SAXException, IOException {
 		if (documentBuilderFactory == null) {
-			documentBuilderFactory= DocumentBuilderFactory.newDefaultInstance();
+			documentBuilderFactory = DocumentBuilderFactory.newInstance();
 			documentBuilder = documentBuilderFactory.newDocumentBuilder();
 		}
 

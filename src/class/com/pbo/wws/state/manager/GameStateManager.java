@@ -9,6 +9,7 @@ import com.pbo.wws.entity.Character.CharacterException;
 import com.pbo.wws.frame.Main;
 import com.pbo.wws.io.Renderer;
 import com.pbo.wws.io.Speech;
+import com.pbo.wws.sound.Sound;
 import com.pbo.wws.state.BattleState;
 import com.pbo.wws.state.EndState;
 import com.pbo.wws.state.GameOState;
@@ -30,8 +31,8 @@ public class GameStateManager
 	public static final int GAMEOSTATE = 4;
 	public static final int ENDSTATE = 5;
 	public static final Speech speech = new Speech();
-	
-
+	static Sound menuBgm = new Sound(Main.resourcePath + "/sound/bgmMenu.wav");
+ 
 	public GameStateManager()
 	{
 		currentState = MENUSTATE;
@@ -51,7 +52,16 @@ public class GameStateManager
 	{
 		System.out.println("[GameStateManager] Pindah State");
 		GameStateManager.gameStates.get(currentState).setVisible(false);
-		currentState = state;
+    currentState = state;
+		
+		if(currentState == 0)
+		{
+			menuBgm.play(currentState);
+		}
+		if(currentState !=0){
+			menuBgm.stop();
+		}
+	
 		gameStates.get(currentState).setVisible(true);
 	}
 
