@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 
 import com.pbo.wws.Exitable;
+import com.pbo.wws.GamePanel;
 import com.pbo.wws.MenuChoicable;
 import com.pbo.wws.io.Renderable;
 import com.pbo.wws.frame.Main;
@@ -22,7 +23,7 @@ public class GameOState extends GameState implements Exitable, MenuChoicable
 	private int currentChoice = 0;
 	private Image image;
 	private Image[] imageUI = new Image[5];
-	private boolean win = false;
+	private boolean win = true;
 	
 	public GameOState (GameStateManager gsm) 
 	{
@@ -88,6 +89,10 @@ public class GameOState extends GameState implements Exitable, MenuChoicable
 
 		g.drawImage(image, 0, 0, 1280, 720, null);
 		g.setPaintMode();
+
+		g.setColor(Color.white);
+		g.setFont(GamePanel.getCoolFont());
+		g.drawString("GOOD JOB.", Main.getWidth() / 2 - 90, Main.getHeight() / 2 - 130);
 
 		if (!win) {
 			g.drawImage(imageUI[4],50,50,null);			

@@ -1,6 +1,7 @@
 package com.pbo.wws.io;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,6 +11,7 @@ import java.util.Iterator;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import com.pbo.wws.GamePanel;
 import com.pbo.wws.frame.Main;
 import com.pbo.wws.io.Renderable;
 
@@ -117,6 +119,7 @@ public class Renderer extends JPanel implements ActionListener{
 				d.render(g);				
 			}
 		}
+		
 	}
 
 	@Override

@@ -1,6 +1,6 @@
 package com.pbo.wws.entity;
 
-public class EnemyWithMp extends MagicCharacter {
+public abstract class EnemyWithMp extends MagicCharacter {
 
 	public EnemyWithMp(String name, 
 					   String spriteImgFileName,
@@ -29,7 +29,7 @@ public class EnemyWithMp extends MagicCharacter {
 	}
 
 	@Override
-	public void doSpell(String spell, FightingCharacter opponent) {
+	public void doSpell(String spell, CanAttack opponent) {
 		// TODO Auto-generated method stub
 		
 	}

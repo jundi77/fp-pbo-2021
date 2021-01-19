@@ -14,7 +14,7 @@ import com.pbo.wws.state.manager.GameStateManager;
 import com.pbo.wws.io.KeyMapper;
 import com.pbo.wws.io.Renderer;
 import com.pbo.wws.state.GameState;
-import com.pbo.wws.state.GameStateManager;
+import com.pbo.wws.state.manager.GameStateManager;
 
 public class EndState extends GameState implements Exitable
 {

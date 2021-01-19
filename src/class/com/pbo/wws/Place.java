@@ -26,6 +26,7 @@ import com.pbo.wws.entity.Character;
 import com.pbo.wws.entity.Enemy;
 import com.pbo.wws.entity.FightingCharacter;
 import com.pbo.wws.entity.Movable;
+import com.pbo.wws.entity.Player;
 import com.pbo.wws.frame.Main;
 import com.pbo.wws.io.KeyMapper;
 import com.pbo.wws.io.Renderable;
@@ -46,8 +47,8 @@ public class Place implements Renderable, Movable{
 	private static DocumentBuilderFactory documentBuilderFactory = null;
 	private static DocumentBuilder documentBuilder;
 
-	private java.net.URL tmxPath = null, // URL file tmx
-						 tsxPath = null, // URL file tsx
+	InputStream tmxPath = null;
+	private java.net.URL tsxPath = null, // URL file tsx
 						 imgPath = null; // URL file image sumber tile
 
 	private String name; 		// nama dari Place
@@ -98,7 +99,8 @@ public class Place implements Renderable, Movable{
 		this.player = player;
 		this.tileDetails = tileDetails;
 		this.name = name;
-		this.tmxPath = getClass().getResource(placeRootDir + "/" + name + "/" + tmxFileName);
+		this.tmxPath = getClass().getResourceAsStream(placeRootDir + "/" + name + "/" + tmxFileName);
+		System.out.println("[Place] " + tmxPath.available());
 		this.width = this.height = tileDisplayedSize;
 		this.x = xUpperLeft;
 		this.y = yUpperLeft;
@@ -121,7 +123,7 @@ public class Place implements Renderable, Movable{
 	}
 
 	public void fillTilesDetails() throws IOException, SAXException {
-		Document tmxDoc = documentBuilder.parse(this.tmxPath.getFile());
+		Document tmxDoc = documentBuilder.parse(this.tmxPath);
 		
 		Element map = tmxDoc.getDocumentElement();
 		Node tileset = map.getElementsByTagName("tileset").item(0);
@@ -154,7 +156,7 @@ public class Place implements Renderable, Movable{
 		String tmxSrc = tileset.getAttributes().getNamedItem("source").getNodeValue();
 		this.tsxPath = getClass().getResource(placeRootDir + "/" + name + "/" + tmxSrc);
 		
-		Document tsxDoc = documentBuilder.parse(tsxPath.getFile());
+		Document tsxDoc = documentBuilder.parse(tsxPath.openStream());
 
 		Element tsxTileset = tsxDoc.getDocumentElement();
 		Node image = tsxTileset.getElementsByTagName("image").item(0);
@@ -167,7 +169,7 @@ public class Place implements Renderable, Movable{
 
 		String tsxImgSrc = imageAttr.getNamedItem("source").getNodeValue();
 		this.imgPath = getClass().getResource( placeRootDir + "/" + name + "/" + tsxImgSrc);
-		this.img = ImageIO.read(this.imgPath);
+		this.img = ImageIO.read(this.imgPath.openStream());
 	}
 	
 	@Override
@@ -203,8 +205,6 @@ public class Place implements Renderable, Movable{
 
 				g.drawImage(this.img, dx1, dy1, dx2, dy2, sx1, sy1, sx2, sy2, null, null);
 				g.setColor(Color.blue);
-				g.drawRect(dx1, dy1, this.width, this.height);
-				g.drawLine(this.x + this.width * 18, this.y + this.height * 2, this.x + this.width * 18, this.y + this.height * 3);
 
 
 				FightingCharacter e = this.enemies.get((i - 1) * this.mapWidth + j);
@@ -223,39 +223,6 @@ public class Place implements Renderable, Movable{
 		
 
 		this.collideHandling();
-
-		int diffX = this.xStart - this.x;
-		int diffY = this.yStart - this.y;
-		int diffCol = (diffX + ((diffX > 0)? this.width/2 : -this.width/2)) / this.width;
-		int diffRow = (diffY + ((diffY > 0)? this.height : (this.y >= this.yStart)? 0 : -this.height)) / this.height;
-		int currentTile = this.playerTileStart + diffCol + (diffRow - 1) * this.mapWidth;
-
-		int ulCurrentCol = currentTile % this.mapWidth;
-		int ulCurrentRow = currentTile / this.mapWidth;
-
-		for (int i = -1; i <= 1; i++) {
-			for (int j = -1; j <= 1; j++) {
-				g.setColor(new Color(255, 255, 255, 80));
-				g.fillRect(this.x + (ulCurrentCol - 1 + j) * this.width, this.y + (ulCurrentRow + i) * this.height, this.width, this.height);
-				FightingCharacter e = this.enemies.get(ulCurrentCol + j + (ulCurrentRow + i) * this.mapWidth);
-				if (e != null) {
-					//System.out.println("[Place] enemy detected");
-				}
-			}
-		}
-
-		int ulDiffCol = (ulCurrentCol - 1 < 0)? this.mapWidth - 1 : ulCurrentCol - 1;
-		int ulDiffRow = (ulCurrentCol % this.mapWidth == 0)? ulCurrentRow - 1 : ulCurrentRow;
-
-		int ulDiffX = this.x + ulDiffCol * this.width;
-		int ulDiffY = this.y + ulDiffRow * this.height;
-		int drDiffX = this.x + (ulDiffCol + 1) * this.width;
-		int drDiffY = this.y + (ulDiffRow + 1) * this.height;
-
-		int distanceToLeft = Main.getWidth() / 2 - ulDiffX - player.getWidth() / 2;
-		int distanceToRight = drDiffX - Main.getWidth() / 2 - player.getWidth() / 2;
-		int distanceToUp = Main.getHeight() / 2 - ulDiffY;
-		int distanceToDown = drDiffY - Main.getHeight() / 2 - player.getHeight() / 2;
 
 		//System.out.println(this.getCurrentTile());
 	}
@@ -532,6 +499,7 @@ public class Place implements Renderable, Movable{
 				FightingCharacter e = this.enemies.get(ulCurrentCol + j + (ulCurrentRow + i) * this.mapWidth);
 				if (e != null) {
 					System.out.println("[Place] enemy detected at " + (ulCurrentCol + j + (ulCurrentRow + i) * this.mapWidth));
+					((BattleState) GameStateManager.getState(GameStateManager.BATTLESTATE)).setPlayer((Player) this.player);
 					((BattleState) GameStateManager.getState(GameStateManager.BATTLESTATE)).setEnemy((Enemy)e, ulCurrentCol + j + (ulCurrentRow + i) * this.mapWidth);
 					GameStateManager.setState(GameStateManager.BATTLESTATE);
 				}
@@ -551,5 +519,23 @@ public class Place implements Renderable, Movable{
 	public boolean getVisibility() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public void setMovingStatus(boolean move) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean getMovingStatus() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void setVisible(boolean visible) {
+		// TODO Auto-generated method stub
+		
 	}
 }

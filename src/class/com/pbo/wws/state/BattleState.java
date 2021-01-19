@@ -7,10 +7,12 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
 import com.pbo.wws.Exitable;
+import com.pbo.wws.GamePanel;
 import com.pbo.wws.MenuChoicable;
 import com.pbo.wws.entity.Enemy;
 import com.pbo.wws.entity.FightingCharacter;
@@ -26,13 +28,17 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 {
 	private int currentChoice = 1,
 				currentTurn = 0,
-				fromTile; // 0 itu player, 1 itu enemy
+				fromTile, // 0 itu player, 1 itu enemy
+				state = 0,
+				selectedSpell = 0; // 0 non listening, 1 listening spell
 	private Image image;
 	private Image[] imageUI = new Image[4];
-	private BufferedImage mpHud, spellHud;
+	private BufferedImage mpHud, spellHud, serangBatal;
 	private Enemy enemy = null;
 	private Player player = null;
+	private ArrayList<String> playerSpell;
 
+	@SuppressWarnings("serial")
 	public BattleState (GameStateManager gsm) 
 	{
 		this.gsm = gsm;
@@ -53,33 +59,58 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 					.getResourceAsStream(Main.resourcePath + "/ui/Kombat/uiKarakterMP.png"));
 			spellHud = ImageIO.read(getClass()
 					.getResourceAsStream(Main.resourcePath + "/ui/Kombat/uiAttackSpecial.png"));
+			serangBatal = ImageIO.read(getClass()
+					.getResourceAsStream(Main.resourcePath + "/ui/Kombat/uiSerangBatal.png"));
 		}catch(Exception e){
 			e.printStackTrace();
 		}
 		
+		this.playerSpell = new ArrayList<String>() {{
+			add("armor");
+			add("burning");
+			add("college");
+			add("defence");
+			add("element");
+		}};
+
 		Renderer.addDrawable(this);
 	}
 
 	public void selectChoice() {
 		switch (this.currentChoice) {
 		case 0: // sihir
-//			if ()
+			if (this.state == 0) {
+				// masuk ke mode listen
+				selectedSpell = (int) ((Math.random() * 10)  % this.playerSpell.size());
+				this.state = 1;
+				GameStateManager.speech.listen(this.playerSpell.get(selectedSpell));
+			} else if (this.state == 1) {
+				// keluar mode listen
+				GameStateManager.speech.stopListen();
+				this.state = 0;
+			}
 			break;
 		// serang
 		case 1:
-			if (currentTurn == 0) {
-				player.attack("default", enemy);
-				enemy.playAnimation("damaged");
+			if (this.state == 0) {
+				if (currentTurn == 0) {
+					player.attack("default", enemy);
+					enemy.playAnimation("damaged");
+				}
+				if (enemy.getHealth() <= 0) {
+					enemy.playAnimation("mati");
+				} else {			
+					currentTurn = 1;
+				}
+			} else if (this.state == 1) {
+				// keluar mode listen
+				System.out.println("[BS] batal spell");
+				GameStateManager.speech.stopListen();
+				this.state = 0;
 			}
 			break;
 		default:
 			break;
-		}
-		
-		if (enemy.getHealth() <= 0) {
-			enemy.playAnimation("mati");
-		} else {			
-			currentTurn = 1;
 		}
 	}
 
@@ -88,13 +119,13 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 		if(KeyMapper.isPressed(KeyMapper.KEY_ENTER)){
 			KeyMapper.confirmEnter();
 			selectChoice();
-		} else if(KeyMapper.isPressed(KeyMapper.KEY_UP)){
+		} else if(KeyMapper.isPressed(KeyMapper.KEY_UP) && this.state == 0){
 			KeyMapper.confirmArrow();
 			currentChoice--;
 			if(currentChoice == -1){
 				currentChoice = imageUI.length/ 2 - 1;
 			}
-		} else if(KeyMapper.isPressed(KeyMapper.KEY_DOWN)){
+		} else if(KeyMapper.isPressed(KeyMapper.KEY_DOWN) && this.state == 0){
 			KeyMapper.confirmArrow();
 			currentChoice++;
 			if(currentChoice == imageUI.length/ 2){
@@ -153,12 +184,13 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 
 		if (currentTurn == 0) {
 			moveChoice();			
-		} else {
+		} else if (state == 0){
 			enemy.attack("default", player);
 			enemy.playAnimation("serang");
 			currentTurn = 0;
 		}
 
+		if (this.state == 0)
 		for(int options = 0; options < (imageUI.length / 2); options++)
 		{
 			if(options == currentChoice) {
@@ -166,6 +198,16 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 			} else {
 				g.drawImage(imageUI[options * 2], 60, 550 + 50 * options, null);				
 			}
+		}
+		
+		else if (this.state == 1) {
+			// spell atttack
+
+			g.drawImage(serangBatal, 60, 550, 300, 592, 0, 0, 60, 21 / 2, null);
+			g.drawImage(spellHud, Main.getWidth() / 2 - 160 * 2 - 80, 70,  Main.getWidth() / 2 + 160 * 2 - 80, 50 * 4 + 70, null, null);
+			g.setColor(Color.black);
+			g.setFont(GamePanel.getCoolFont());
+			g.drawString(this.playerSpell.get(selectedSpell), Main.getWidth() / 2 - 90, Main.getHeight() / 2 - 130);
 		}
 
 		// config musuh kritis
@@ -175,14 +217,12 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 		enemy.render(g);
 		g.setPaintMode();
 		
+
 		// overlay blood transparent
 		g.setColor(
 				new Color(255, 0, 0, (int) ((player.getFullHealth() - player.getHealth()) / (float) player.getFullHealth() * 100))
 		);
 		g.fillRect(0, 0, Main.getWidth(), Main.getHeight());
-		
-		// special attack
-//		g.drawImage(spellHud, Main.getWidth() / 2 - 160 * 2 - 80, 70,  Main.getWidth() / 2 + 160 * 2 - 80, 50 * 4 + 70, null, null);
 	}
 
 	@Override
@@ -208,6 +248,20 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 
 	public void setPlayer(Player player) {
 		this.player = player;
+	}
+
+	public void confirmSpell() {
+		System.out.println("[BS] Confirmed spell");
+		GameStateManager.speech.stopListen();
+		player.setMp(player.getMp() - player.getSpells().get(this.playerSpell.get(selectedSpell))[0]);
+		try {
+			enemy.setHealth(enemy.getHealth() - player.getSpells().get(this.playerSpell.get(selectedSpell))[1]);
+			enemy.playAnimation("damaged");
+		} catch (FightingCharacterException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		this.state = 0;
 	}
 
 	@Override

@@ -22,7 +22,7 @@ public class PlayState extends GameState implements Exitable
 {
 	private Place p;
 	private Player c;
-	private Enemy e;
+	private Enemy[] e;
 
 	@SuppressWarnings("serial")
 	public PlayState (GameStateManager gsm)
@@ -82,14 +82,26 @@ public class PlayState extends GameState implements Exitable
 		}
 
 		try {
-			e = new Enemy("monster", "monsterBerdiri.png", 120, 120, -120, -120);
-			
-			// TODO tambah enemy yang lain
-			p.addEnemy(e, 99); // TODO tambah direction lihat ke mana
+			e = generateEnemy();
+
+			p.addEnemy(e[0], 7);
+			p.addEnemy(e[1], 10);
+			p.addEnemy(e[2], 109);
+			p.addEnemy(e[3], 12 * 20 + 6);
 		} catch (CharacterException | IOException e1) {
 			e1.printStackTrace();
 			System.exit(1);
 		}
+	}
+
+	private Enemy[] generateEnemy() throws CharacterException, IOException {
+		Enemy[] baru = new Enemy[4];
+		
+		for (int i = 0; i < baru.length; i++) {
+			baru[i] = new Enemy("monster", "monsterBerdiri.png", 120, 120, -120, -120);
+		}
+		
+		return baru;
 	}
 
 	@Override

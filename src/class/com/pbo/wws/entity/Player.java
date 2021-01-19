@@ -30,7 +30,7 @@ public class Player extends MagicCharacter {
 		this.setTotalMovement(5 * Ticker.getRatePerSecond() / 12);
 
 		this.setAttacks(new HashMap<String, Integer>() {{
-			put("default", 10);
+			put("default", 100);
 		}});
 		
 		/**
@@ -76,10 +76,6 @@ public class Player extends MagicCharacter {
 		if(!keyMovementWatcher()) {
 			this.setMovement((this.getTotalMovement() / 5) * 2);
 		};
-		
-		// gambar bound
-		g.setColor(Color.RED);
-		g.drawRect(this.getX(), this.getY(), this.getWidth(), this.getHeight());
 		
 		//System.out.println(this.getMovement());
 		// gambar sprite

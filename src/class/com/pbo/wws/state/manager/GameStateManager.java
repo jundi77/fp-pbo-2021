@@ -9,6 +9,7 @@ import com.pbo.wws.entity.Player;
 import com.pbo.wws.entity.Character.CharacterException;
 import com.pbo.wws.frame.Main;
 import com.pbo.wws.io.Renderer;
+import com.pbo.wws.io.Speech;
 import com.pbo.wws.state.BattleState;
 import com.pbo.wws.state.GameOState;
 import com.pbo.wws.state.GameState;
@@ -28,6 +29,8 @@ public class GameStateManager
 	public static final int BATTLESTATE = 3;
 	public static final int GAMEOSTATE = 4;
 	public static final int ENDSTATE = 5;
+	public static final Speech speech = new Speech();
+	
 
 	public GameStateManager()
 	{
@@ -40,24 +43,7 @@ public class GameStateManager
 		gameStates.add(new GameOState(this));
 		gameStates.add(new EndState(this));
 
-		try {
-			Enemy e = new Enemy("monster", "monsterBerdiri.png", 120, 120, -120, -120);
-//			e.setX(60);
-//			e.setY(60);
-			((BattleState)this.gameStates.get(BATTLESTATE)).setEnemy(e, 0);
-		} catch (CharacterException | IOException e1) {
-			e1.printStackTrace();
-			System.exit(1);
-		}
-		
-		try {
-			Player c = new Player("main", "spriteUtama(32x32).png", 120, 120, 32, 32, Main.getWidth() / 2, Main.getHeight() / 2);
-			((BattleState)this.gameStates.get(BATTLESTATE)).setPlayer(c);
-		} catch (CharacterException e1) {
-			e1.printStackTrace();
-		}
-
-		setState(GAMEOSTATE);
+		setState(MENUSTATE);
 		Renderer.setRunning(true);
 	}
 
