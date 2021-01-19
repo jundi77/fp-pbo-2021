@@ -67,7 +67,7 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 			add("armor");
 			add("burning");
 			add("college");
-			add("defence");
+			add("defense");
 			add("element");
 		}};
 
@@ -249,8 +249,11 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 		return player;
 	}
 
-	public void setPlayer(Player player) {
+	public void setPlayer(Player player) throws FightingCharacterException {
 		this.player = player;
+
+		player.setHealth(player.getFullHealth());
+		player.setMp(player.getFullMp());
 	}
 
 	public void confirmSpell() {
@@ -260,6 +263,7 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 		try {
 			enemy.setHealth(enemy.getHealth() - player.getSpells().get(this.playerSpell.get(selectedSpell))[1]);
 			enemy.playAnimation("damaged");
+			this.currentTurn = 1;
 		} catch (FightingCharacterException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
