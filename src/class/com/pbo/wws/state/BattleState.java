@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -42,23 +43,9 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 
 		try{
 			image = (Image) ImageIO.read(getClass().getResourceAsStream(Main.resourcePath + "/ui/Kombat/uiKombat.png"));
-			
 			BufferedImage imageTombol = ImageIO.read(getClass().getResourceAsStream(Main.resourcePath + "/ui/Kombat/tombolKombat.png"));
-//			
-//			BufferedImage imageKMP = ImageIO.read(getClass().getResourceAsStream(Main.resourcePath + "/ui/Kombat/uiKarakterMP.png"));
-//			
-//			//4 gerakan monster: menyerang, diserang, mati, ready
-//			BufferedImage imageMMati = ImageIO.read(getClass().getResourceAsStream(Main.resourcePath + "/entity/monster/monsterMati.png"));
-//			BufferedImage imageMReady = ImageIO.read(getClass().getResourceAsStream(Main.resourcePath + "/entity/monster/monsterReady.png"));
-//			BufferedImage imageMSerang = ImageIO.read(getClass().getResourceAsStream(Main.resourcePath + "/entity/monster/monsterSerang.png"));
-//			BufferedImage imageMDamage = ImageIO.read(getClass().getResourceAsStream(Main.resourcePath + "/entity/monster/monsterDamaged.png"));
-//
-//			fetchMonster(imageMReady, monsterReady);
-//			fetchMonster(imageMMati, monsterMati);
-//			fetchMonster(imageMSerang, monsterSerang);
-//			fetchMonster(imageMDamage, monsterDamage);
 			
-			int y = 0;
+			int y=0;
 			for(int i = 0; i < imageUI.length ;i++)
 			{
 				imageUI[i] = (Image) imageTombol.getSubimage(0, y, 60, 12);
@@ -150,7 +137,6 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 			quit();
 		}
 	}
-	
 
 	@Override
 	public void render(Graphics g) {
@@ -286,5 +272,4 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 		((PauseState) GameStateManager.getState(GameStateManager.PAUSESTATE)).setResumeTo(GameStateManager.BATTLESTATE);
 		GameStateManager.setState(GameStateManager.PAUSESTATE);
 	}
-
 }

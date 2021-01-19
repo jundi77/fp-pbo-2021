@@ -111,6 +111,5 @@ public class MenuState extends GameState implements Exitable, MenuChoicable
 	@Override
 	public void quit() {
 		System.exit(0);
-		
 	}
 }

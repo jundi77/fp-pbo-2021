@@ -8,8 +8,8 @@ import com.pbo.wws.entity.Player;
 import com.pbo.wws.entity.Character.CharacterException;
 import com.pbo.wws.frame.Main;
 import com.pbo.wws.io.Renderer;
-import com.pbo.wws.sound.Sound;
 import com.pbo.wws.io.Speech;
+import com.pbo.wws.sound.Sound;
 import com.pbo.wws.state.BattleState;
 import com.pbo.wws.state.EndState;
 import com.pbo.wws.state.GameOState;
@@ -54,9 +54,7 @@ public class GameStateManager
 		System.out.println("[GameStateManager] Pindah State");
 		GameStateManager.gameStates.get(currentState).setVisible(false);
 		
-		
 		currentState = state;
-		System.out.println(currentState);
 		
 		if(currentState == 0)
 		{
@@ -74,7 +72,6 @@ public class GameStateManager
 	 * @param state
 	 * @return
 	 */
-	
 	public static GameState getState(int state) {
 		return GameStateManager.gameStates.get(state);
 	}

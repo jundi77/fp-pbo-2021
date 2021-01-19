@@ -49,6 +49,7 @@ public class Ticker {
 		System.out.println("[Ticker] Ticker belum dimulai!");
 	}
 
+	@SuppressWarnings("serial")
 	private static void newTimer() {
 		Ticker.timer = new Timer(1000 / RATE_PER_SECOND, new ActionListener() {
 
