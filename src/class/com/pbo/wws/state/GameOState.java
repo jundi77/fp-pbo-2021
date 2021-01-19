@@ -1,5 +1,6 @@
 package com.pbo.wws.state;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
@@ -7,19 +8,20 @@ import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
 
-import com.pbo.wws.Exitable;
-import com.pbo.wws.MenuChoicable;
-import com.pbo.wws.Renderable;
+import com.pbo.wws.io.Renderable;
+import com.pbo.wws.frame.GamePanel;
 import com.pbo.wws.frame.Main;
 import com.pbo.wws.io.KeyMapper;
 import com.pbo.wws.io.Renderer;
+import com.pbo.wws.state.manager.GameStateManager;
 
-public class GameOState extends GameState implements Renderable, Exitable, MenuChoicable
+public class GameOState extends GameState implements Exitable, MenuChoicable
 {
 	
 	private int currentChoice = 0;
 	private Image image;
 	private Image[] imageUI = new Image[5];
+	private boolean win = true;
 	
 	public GameOState (GameStateManager gsm) 
 	{
@@ -41,26 +43,23 @@ public class GameOState extends GameState implements Renderable, Exitable, MenuC
 		}catch(Exception e){
 			e.printStackTrace();
 		}
+		
+		Renderer.addDrawable(this);
 	}
-	
-	@Override
-	public void moveChoice(int keyCode) 
+
+	public void moveChoice() 
 	{
-		if(KeyMapper.KEY_ENTER == keyCode){
-			System.out.println("ENTER");
+		if(KeyMapper.isPressed(KeyMapper.KEY_ENTER)){
+			KeyMapper.confirmEnter();
 			selectChoice();
-			}
-		if(KeyMapper.KEY_UP == keyCode){
+		} else if(KeyMapper.isPressed(KeyMapper.KEY_UP)){
 			KeyMapper.confirmArrow();
-			System.out.println("UP");
 			currentChoice--;
 			if(currentChoice == -1){
 				currentChoice = imageUI.length/ 2 - 1;
 			}
-		}
-		if(KeyMapper.KEY_DOWN == keyCode){
+		} else if(KeyMapper.isPressed(KeyMapper.KEY_DOWN)){
 			KeyMapper.confirmArrow();
-			System.out.println("DOWN");
 			currentChoice++;
 			if(currentChoice == imageUI.length/ 2){
 				currentChoice = 0;
@@ -76,31 +75,27 @@ public class GameOState extends GameState implements Renderable, Exitable, MenuC
 		if(currentChoice == 1){
 			quit();
 		}
-	}	
-
-	@Override
-	public void init() {
-
-		setVisible(true);
 	}
 
 	public void render(Graphics g) {
 		
-		if(KeyMapper.isPressed(KeyMapper.KEY_UP)){
-			KeyMapper.confirmArrow();
-			moveChoice(KeyMapper.KEY_UP);
-		}
-		else if(KeyMapper.isPressed(KeyMapper.KEY_DOWN)){
-			KeyMapper.confirmArrow();
-			moveChoice(KeyMapper.KEY_DOWN);
-		}
-		else if(KeyMapper.isPressed(KeyMapper.KEY_ENTER)){
-			KeyMapper.confirmEnter();
-			moveChoice(KeyMapper.KEY_ENTER);
+		moveChoice();
+
+		if (!win) {
+			g.setXORMode(Color.red);			
 		}
 
 		g.drawImage(image, 0, 0, 1280, 720, null);
-		g.drawImage(imageUI[4],50,50,null);
+		g.setPaintMode();
+
+		g.setColor(Color.white);
+		g.setFont(GamePanel.getCoolFont());
+		g.drawString("GOOD JOB.", Main.getWidth() / 2 - 90, Main.getHeight() / 2 - 130);
+
+		if (!win) {
+			g.drawImage(imageUI[4],50,50,null);			
+		}
+
 		for(int options = 0; options < ((imageUI.length - 1) / 2); options++)
 		{
 			if(options == currentChoice)
@@ -111,28 +106,22 @@ public class GameOState extends GameState implements Renderable, Exitable, MenuC
 			}
 		}
 	}
-	
-	
-	@Override
-	public void setVisible(boolean visible) {
 
-		if(visible == false)
-			Renderer.removeDrawable(this);
-		else
-			Renderer.addDrawable(this);
+	public void setWin(boolean win) {
+		this.win = win;
 	}
 
 	@Override
-	public boolean getVisibility() {
-
-		return false;
+	public void setVisible(boolean visible) {
+		if (visible) {
+			System.out.println("[GameOState] Pindah ke aku");
+		}
+		super.setVisible(visible);
 	}
 
 	@Override
 	public void quit() {
-		setVisible(false);
+		((PlayState) GameStateManager.getState(GameStateManager.PLAYSTATE)).reset();
 		GameStateManager.setState(GameStateManager.MENUSTATE);
 	}
-
-
 }

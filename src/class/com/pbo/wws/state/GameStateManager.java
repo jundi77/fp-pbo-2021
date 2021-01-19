@@ -33,7 +33,7 @@ public class GameStateManager
 //		
 //		setState(PLAYSTATE);
 		
-		(new BattleState(this)).init();
+		(new MenuState(this)).init();
 	}
 
 	//terbuka untuk public(class lain)

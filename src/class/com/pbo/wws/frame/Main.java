@@ -1,8 +1,9 @@
 package com.pbo.wws.frame;
 
-import javax.swing.JFrame;
+import java.awt.Font;
+import java.awt.GraphicsEnvironment;
 
-import com.pbo.wws.GamePanel;
+import javax.swing.JFrame;
 
 public class Main {
 	public static final String resourcePath = "/res/pbo/wws";
