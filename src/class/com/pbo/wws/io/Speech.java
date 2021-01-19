@@ -68,5 +68,6 @@ public class Speech {
 
 	public synchronized void stopListen() {
 		listening = false;
+		this.listenThread = new Thread(listenInBg);
 	}
 }
