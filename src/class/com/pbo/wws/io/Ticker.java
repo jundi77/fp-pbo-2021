@@ -18,9 +18,10 @@ public class Ticker {
 
 		if (!isTicking()) {
 			Ticker.timer.start();			
+		} else {
+			System.out.println("[Ticker] Ticker sudah berjalan!");
 		}
 		
-		System.out.println("[Ticker] Ticker sudah berjalan!");
 	}
 	
 	public static void start(int ratePerSecond) {
@@ -54,7 +55,6 @@ public class Ticker {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				for (ActionListener actionListener : pushActionList) {
 					actionListener.actionPerformed(e);
 				}
@@ -85,7 +85,8 @@ public class Ticker {
 		
 	}
 
-	public static void setRatePerSecond(int ratePerSecond) {
-		Ticker.RATE_PER_SECOND = ratePerSecond;
+	
+	public static int getRatePerSecond() {
+		return Ticker.RATE_PER_SECOND;
 	}
 }

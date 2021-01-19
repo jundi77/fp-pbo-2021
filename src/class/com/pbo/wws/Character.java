@@ -1,24 +1,15 @@
 package com.pbo.wws;
 
-import java.awt.Component;
 import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
-import java.beans.PropertyChangeListener;
-import java.io.File;
-import javax.swing.Timer;
 
+import com.pbo.wws.entity.Movable;
 import com.pbo.wws.frame.Main;
 import com.pbo.wws.io.KeyMapper;
+import com.pbo.wws.io.Renderable;
 import com.pbo.wws.io.Renderer;
 
 import javax.imageio.ImageIO;
-import javax.swing.Action;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
 
 public class Character implements Renderable, Movable{
 	private static final String characterRootDir = "src/assets/entity";

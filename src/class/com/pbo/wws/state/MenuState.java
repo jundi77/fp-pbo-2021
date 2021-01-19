@@ -8,16 +8,23 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 
 import com.pbo.wws.Exitable;
-import com.pbo.wws.Renderable;
 import com.pbo.wws.frame.Main;
+import com.pbo.wws.io.Renderable;
 import com.pbo.wws.io.Renderer;
+import com.pbo.wws.state.manager.GameStateManager;
+
+import com.pbo.wws.MenuChoicable;
+import com.pbo.wws.io.Renderable;
+import com.pbo.wws.frame.Main;
+import com.pbo.wws.io.KeyMapper;
+import com.pbo.wws.io.Renderer;
+import com.pbo.wws.io.Ticker;
 
 
-public class MenuState extends GameState implements Renderable, Exitable
+public class MenuState extends GameState implements Exitable, MenuChoicable
 {
 	private Image image;
 	private Image[] tombol = new Image[6];
-	
 	private int currentChoice = 0;
 	
 	public MenuState (GameStateManager gsm)
@@ -42,106 +49,70 @@ public class MenuState extends GameState implements Renderable, Exitable
 		}
 	}
 	
+	@Override
+	public void moveChoice() {
+		if (KeyMapper.isPressed(KeyMapper.KEY_ENTER)) {
+			KeyMapper.confirmEnter();
+			selectChoice();
+		} else if (KeyMapper.isPressed(KeyMapper.KEY_UP)) {
+			KeyMapper.confirmArrow();
+			currentChoice--;
+			if(currentChoice == -1){
+				currentChoice = tombol.length/ 2 - 1;
+			}
+			if (currentChoice == 1) {
+				currentChoice = 0;
+			}
+		} else if (KeyMapper.isPressed(KeyMapper.KEY_DOWN)) {
+			KeyMapper.confirmArrow();
+			currentChoice++;
+			if(currentChoice == tombol.length/ 2){
+				currentChoice = 0;
+			}
+			if (currentChoice == 1) {
+				currentChoice = 2;
+			}
+		}
+	}
 	
-	private void selectChoice() {
+	public void selectChoice() {
 		if(currentChoice == 0){
 			setVisible(false);
 			GameStateManager.setState(GameStateManager.PLAYSTATE);
 		}
 		if(currentChoice == 1){
-			//loadGame(continue)
+			currentChoice = 2;
 		}
 		if(currentChoice == 2){
 			quit();
 		}
 	}
 	
-	//GameState
-	
-	@Override
-	public void init() {
-
-		setVisible(true);
-	}
-	
-	@Override
-	public void keyPressed(int k) {
-		
-		if(k == KeyEvent.VK_ENTER){
-			selectChoice();
-			}
-		if(k == KeyEvent.VK_UP){
-			System.out.println("Ke atas");
-			currentChoice--;
-			if(currentChoice == -1){
-				currentChoice = tombol.length/ 2 - 1;
-			}
-		}
-		if(k == KeyEvent.VK_DOWN){
-			System.out.println("Ke bawah");
-			currentChoice++;
-			if(currentChoice == tombol.length/ 2){
-				currentChoice = 0;
-			}
-		}
-		
-		//Dev Key To BattleState
-		
-		if(k == KeyEvent.VK_B){
-			setVisible(false);
-			GameStateManager.setState(GameStateManager.BATTLESTATE);
-		}
-		
-		//Dev Key To GameOState
-		if(k == KeyEvent.VK_G){
-			setVisible(false);
-			GameStateManager.setState(GameStateManager.GAMEOSTATE);
-		}
-		
-		//Dev Key To EndState
-		if(k == KeyEvent.VK_E){
-			setVisible(false);
-			GameStateManager.setState(GameStateManager.ENDSTATE);
-		}
-	}
-
-	@Override
-	public void keyReleased(int k) {
-		
-	}
-	
 	@Override
 	public void render(Graphics g) {
+		moveChoice();
 
 		g.drawImage(image, 0, 0, 1280, 720, null);
-		
-		for(int options = 0; options < (tombol.length / 2); options++)
-		{
-			if(options == currentChoice)
-			{
-				g.drawImage(tombol[2 * options + 1], 100, 300 + 50 * options, null);
-			}else{
-				g.drawImage(tombol[2 * options ], 100, 300 + 50 * options, null);				
+		for(int options = 0; options < (tombol.length / 2); options++){
+			if (options == 1) continue; // belum ada fitur load
+			if(options == currentChoice){
+				g.drawImage(tombol[2 * options + 1], 100, 300 + 50 * ((options == 2)? 1 : 0), null);
+			} else {
+				g.drawImage(tombol[2 * options ], 100, 300 + 50 * ((options == 2)? 1 : 0), null);				
 			}
 		}
 	}
+
 	@Override
 	public void setVisible(boolean visible) {
-		if(visible == false)
-			Renderer.removeDrawable(this);
-		else
-			Renderer.addDrawable(this);
-	}
-	@Override
-	public boolean getVisibility() {
-
-		return false;
+		if (visible) {
+			System.out.println("[MenuState] Pindah ke aku");
+		}
+		super.setVisible(visible);
 	}
 
 	@Override
 	public void quit() {
-
 		System.exit(0);
 	}
-	
 }

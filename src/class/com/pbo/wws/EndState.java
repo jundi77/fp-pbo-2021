@@ -7,11 +7,16 @@ import java.awt.event.KeyEvent;
 import javax.imageio.ImageIO;
 
 import com.pbo.wws.frame.Main;
+import com.pbo.wws.io.Renderable;
 import com.pbo.wws.io.Renderer;
 import com.pbo.wws.state.GameState;
-import com.pbo.wws.state.GameStateManager;
+import com.pbo.wws.state.manager.GameStateManager;
+import com.pbo.wws.io.KeyMapper;
+import com.pbo.wws.io.Renderer;
+import com.pbo.wws.state.GameState;
+import com.pbo.wws.state.manager.GameStateManager;
 
-public class EndState extends GameState implements Renderable, Exitable
+public class EndState extends GameState implements Exitable
 {
 	private Image image;
 	private Image imageUI;
@@ -27,54 +32,29 @@ public class EndState extends GameState implements Renderable, Exitable
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-	}
-
-	@Override
-	public void init() {
-
-		setVisible(true);
-	}
-
-	@Override
-	public void keyPressed(int k) {
-
-		if(k == KeyEvent.VK_ENTER){
-			quit();
-			}
-	}
-
-	@Override
-	public void keyReleased(int k) {
-
-		
+		Renderer.addDrawable(this);
 	}
 
 	@Override
 	public void quit() {
-
 		setVisible(false);
 		GameStateManager.setState(GameStateManager.MENUSTATE);
 	}
 	
 	@Override
 	public void render(Graphics g) {
-
+		if(KeyMapper.isPressed(KeyMapper.KEY_ENTER))
+			quit();
+		
 		g.drawImage(image, 0, 0, 1280, 720, null);
 		g.drawImage(imageUI,100,50,null);
 	}
 	
 	@Override
 	public void setVisible(boolean visible) {
-
-		if(visible == false)
-			Renderer.removeDrawable(this);
-		else
-			Renderer.addDrawable(this);
-	}
-	
-	@Override
-	public boolean getVisibility() {
-
-		return false;
+		if (visible) {
+			System.out.println("[EndState] Pindah ke aku");
+		}
+		super.setVisible(visible);
 	}
 }
