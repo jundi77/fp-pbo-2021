@@ -29,6 +29,8 @@ import com.pbo.wws.entity.Movable;
 import com.pbo.wws.frame.Main;
 import com.pbo.wws.io.KeyMapper;
 import com.pbo.wws.io.Renderable;
+import com.pbo.wws.state.BattleState;
+import com.pbo.wws.state.manager.GameStateManager;
 
 public class Place implements Renderable, Movable{
 	private static final String placeRootDir = Main.resourcePath + "/tile/map"; // Direktori utama map tile
@@ -217,7 +219,7 @@ public class Place implements Renderable, Movable{
 			}
 		}
 
-//		this.detectEnemy();
+		this.detectEnemy();
 		
 
 		this.collideHandling();
@@ -521,11 +523,18 @@ public class Place implements Renderable, Movable{
 	}
 
 	public void detectEnemy() {
-		int currenTile = this.getCurrentTile();
-		for (int i = 0; i < 9; i++) {
-			FightingCharacter e = this.enemies.get(this.getCurrentTile() + (i / 3) * this.mapWidth + (i % 3));
-			if (e != null) {
-				//System.out.println("[Place] enemy detected");
+		int currentTile = this.getCurrentTile();
+
+		int ulCurrentCol = currentTile % this.mapWidth;
+		int ulCurrentRow = currentTile / this.mapWidth;
+		for (int i = -1; i <= 1; i++) {
+			for (int j = -1; j <= 1; j++) {
+				FightingCharacter e = this.enemies.get(ulCurrentCol + j + (ulCurrentRow + i) * this.mapWidth);
+				if (e != null) {
+					System.out.println("[Place] enemy detected at " + (ulCurrentCol + j + (ulCurrentRow + i) * this.mapWidth));
+					((BattleState) GameStateManager.getState(GameStateManager.BATTLESTATE)).setEnemy((Enemy)e, ulCurrentCol + j + (ulCurrentRow + i) * this.mapWidth);
+					GameStateManager.setState(GameStateManager.BATTLESTATE);
+				}
 			}
 		}
 	}
@@ -533,47 +542,9 @@ public class Place implements Renderable, Movable{
 	public void addEnemy(FightingCharacter enemy, Integer tilePosition) {
 		this.enemies.put(tilePosition, enemy);
 	}
-
-	@Override
-	public void setMovingStatus(boolean move) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public boolean getMovingStatus() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void setVisible(boolean visible) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public boolean getVisibility() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void setMovingStatus(boolean move) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public boolean getMovingStatus() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void setVisible(boolean visible) {
-		// TODO Auto-generated method stub
-		
+	
+	public HashMap<Integer, FightingCharacter> getEnemies() {
+		return this.enemies;
 	}
 
 	@Override

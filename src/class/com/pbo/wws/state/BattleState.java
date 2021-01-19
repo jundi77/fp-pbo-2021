@@ -25,7 +25,8 @@ import com.pbo.wws.state.manager.GameStateManager;
 public class BattleState extends GameState implements Exitable, MenuChoicable 
 {
 	private int currentChoice = 1,
-				currentTurn = 0; // 0 itu player, 1 itu enemy
+				currentTurn = 0,
+				fromTile; // 0 itu player, 1 itu enemy
 	private Image image;
 	private Image[] imageUI = new Image[4];
 	private BufferedImage mpHud, spellHud;
@@ -125,6 +126,12 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 		}
 
 		if (!enemy.isAnimating()) {
+			if (enemy.getHealth() <= 0) {
+				((PlayState) gsm.getState(gsm.PLAYSTATE)).killedMonsterAt(this.fromTile);
+			} else if (player.getHealth() <= 0) {
+				((GameOState) GameStateManager.getState(GameStateManager.GAMEOSTATE)).setWin(false);
+				GameStateManager.setState(GameStateManager.GAMEOSTATE);
+			}
 			enemy.playAnimation("ready");
 		} else if (enemy.isAnimating() && !enemy.getCurrentAnimationState().equalsIgnoreCase("ready")){
 			// config musuh kritis
@@ -190,8 +197,9 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 		return enemy;
 	}
 
-	public void setEnemy(Enemy enemy) {
+	public void setEnemy(Enemy enemy, int fromTile) {
 		this.enemy = enemy;
+		this.fromTile = fromTile;
 	}
 
 	public Player getPlayer() {
@@ -204,6 +212,7 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 
 	@Override
 	public void quit() {
-		// TODO arahkan ke pause
+		((PauseState) GameStateManager.getState(GameStateManager.PAUSESTATE)).setResumeTo(GameStateManager.BATTLESTATE);
+		GameStateManager.setState(GameStateManager.PAUSESTATE);
 	}
 }

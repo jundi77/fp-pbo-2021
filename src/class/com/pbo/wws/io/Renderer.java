@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import com.pbo.wws.frame.Main;
-import com.pbo.wws.Renderable;
+import com.pbo.wws.io.Renderable;
 
 @SuppressWarnings("serial")
 public class Renderer extends JPanel implements ActionListener{

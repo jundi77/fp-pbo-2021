@@ -83,10 +83,10 @@ public class Enemy extends FightingCharacter implements CanAttack, Animatable {
 					null, null);
 			whenAnimating(currentAnimationState);
 			if (++this.currentAnimationFrame >= this.animationFrameCount.get(this.currentAnimationSprite)) {
+				afterAnimating(currentAnimationState);
 				this.currentAnimationState = null;
 				this.currentAnimationSprite = null;
 				this.currentAnimationFrame = 0;
-				afterAnimating(currentAnimationState);
 			}
 		} else {
 			g.drawImage(this.getSprite(),
@@ -102,14 +102,6 @@ public class Enemy extends FightingCharacter implements CanAttack, Animatable {
 					, null, null);			
 		}
 	}
-
-//	@Override
-//	public void render(Graphics g) {
-//		g.drawImage(sprite, x, y, x + width, y + height
-//					, this.srcWidth * this.movement, this.srcHeight * this.direction				// di layar
-//					, this.srcWidth * (this.movement + 1), this.srcHeight * (this.direction + 1)	// di sumber gambar sprite
-//					, null, null);
-//	}
 
 	@Override
 	public void playAnimation(String state) {
@@ -128,7 +120,40 @@ public class Enemy extends FightingCharacter implements CanAttack, Animatable {
 	public String getCurrentAnimationState() {
 		return this.currentAnimationState;
 	}
-	
+
+	@Override
+	public void afterAnimating(String state) {
+		switch (state) {
+		case "mati":
+			this.setSrcWidth(0);
+			this.setSrcHeight(0);
+			break;
+		default:
+			break;
+		}
+	}
+
+	@Override
+	public void setDirection(int direction) {
+		switch (direction) {
+		case DIRECTION_DOWN:
+			direction = 0;
+			break;
+		case DIRECTION_UP:
+			direction = 2;
+			break;
+		case DIRECTION_LEFT:
+			direction = 3;
+			break;
+		case DIRECTION_RIGHT:
+			direction = 1;
+			break;
+		default:
+			break;
+		}
+
+		super.setDirection(direction);
+	}
 	// Custom exception untuk magic character
 	@SuppressWarnings("serial")
 	public class EnemyException extends Exception {

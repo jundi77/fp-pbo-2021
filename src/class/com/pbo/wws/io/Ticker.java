@@ -55,7 +55,6 @@ public class Ticker {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				for (ActionListener actionListener : pushActionList) {
 					actionListener.actionPerformed(e);
 				}

@@ -28,7 +28,7 @@ public class GameStateManager
 	public static final int BATTLESTATE = 3;
 	public static final int GAMEOSTATE = 4;
 	public static final int ENDSTATE = 5;
-	
+
 	public GameStateManager()
 	{
 		currentState = MENUSTATE;
@@ -44,9 +44,8 @@ public class GameStateManager
 			Enemy e = new Enemy("monster", "monsterBerdiri.png", 120, 120, -120, -120);
 //			e.setX(60);
 //			e.setY(60);
-			((BattleState)this.gameStates.get(BATTLESTATE)).setEnemy(e);
+			((BattleState)this.gameStates.get(BATTLESTATE)).setEnemy(e, 0);
 		} catch (CharacterException | IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			System.exit(1);
 		}
@@ -58,7 +57,7 @@ public class GameStateManager
 			e1.printStackTrace();
 		}
 
-		setState(MENUSTATE);
+		setState(GAMEOSTATE);
 		Renderer.setRunning(true);
 	}
 

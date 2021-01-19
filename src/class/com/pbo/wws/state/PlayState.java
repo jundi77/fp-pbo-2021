@@ -1,31 +1,24 @@
 package com.pbo.wws.state;
 
-import java.awt.Color;
-
 import java.awt.Graphics;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
+import com.pbo.wws.Exitable;
 import com.pbo.wws.Place;
-import com.pbo.wws.entity.Character;
 import com.pbo.wws.entity.Character.CharacterException;
 import com.pbo.wws.entity.Enemy;
 import com.pbo.wws.entity.Player;
 import com.pbo.wws.frame.Main;
 import com.pbo.wws.io.KeyMapper;
-import com.pbo.wws.io.Renderable;
 import com.pbo.wws.io.Renderer;
 import com.pbo.wws.state.manager.GameStateManager;
-import com.pbo.wws.io.Renderable;
-import com.pbo.wws.io.KeyMapper;
-import com.pbo.wws.io.Renderer;
 
-public class PlayState extends GameState 
+public class PlayState extends GameState implements Exitable
 {
 	private Place p;
 	private Player c;
@@ -35,6 +28,12 @@ public class PlayState extends GameState
 	public PlayState (GameStateManager gsm)
 	{
 		this.gsm = gsm;
+		this.reset();
+//		TODO e.setDirection(Character.DIRECTION_UP); // Perbaiki direction monster
+		Renderer.addDrawable(this);
+	}
+
+	public void reset() {
 		try {
 			c = new Player("main", "spriteUtama(32x32).png", 120, 120, 32, 32, Main.getWidth() / 2, Main.getHeight() / 2);
 		} catch (CharacterException e1) {
@@ -91,9 +90,6 @@ public class PlayState extends GameState
 			e1.printStackTrace();
 			System.exit(1);
 		}
-
-//		TODO e.setDirection(Character.DIRECTION_UP); // Perbaiki direction monster
-		Renderer.addDrawable(this);
 	}
 
 	@Override
@@ -110,6 +106,16 @@ public class PlayState extends GameState
 		}
 	}
 
+	public void killedMonsterAt(Integer tile) {
+		this.p.getEnemies().remove(tile);
+		if (this.p.getEnemies().size() == 0) {
+			((GameOState) GameStateManager.getState(GameStateManager.GAMEOSTATE)).setWin(true);
+			GameStateManager.setState(GameStateManager.GAMEOSTATE);
+		} else {
+			GameStateManager.setState(GameStateManager.PLAYSTATE);
+		}
+	}
+
 	@Override
 	public void setVisible(boolean visible) {
 		if (visible) {
@@ -118,9 +124,10 @@ public class PlayState extends GameState
 		super.setVisible(visible);
 	}
 
-	private void quit() {
-		((PauseState) gsm.getState(gsm.PAUSESTATE)).setResumeTo(gsm.PLAYSTATE);
-		gsm.setState(gsm.PAUSESTATE);
+	@Override
+	public void quit() {
+		((PauseState) GameStateManager.getState(GameStateManager.PAUSESTATE)).setResumeTo(GameStateManager.BATTLESTATE);
+		GameStateManager.setState(GameStateManager.PAUSESTATE);
 	}
 
 }

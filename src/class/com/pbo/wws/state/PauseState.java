@@ -117,6 +117,7 @@ public class PauseState extends GameState implements Exitable, MenuChoicable
 
 	@Override
 	public void quit() {
+		((PlayState) gsm.getState(gsm.PLAYSTATE)).reset();
 		GameStateManager.setState(GameStateManager.MENUSTATE);
 	}
 }
