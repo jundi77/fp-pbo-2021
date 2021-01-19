@@ -67,7 +67,7 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 			add("armor");
 			add("burning");
 			add("college");
-			add("defence");
+			add("defense");
 			add("element");
 		}};
 

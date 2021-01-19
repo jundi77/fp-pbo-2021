@@ -41,7 +41,7 @@ public class Player extends MagicCharacter {
 			put("armor",   new Integer[] {25, 10});
 			put("burning", new Integer[] {25, 25});
 			put("college", new Integer[] {25, 25});
-			put("defence", new Integer[] {0, 0});
+			put("defense", new Integer[] {0, 0});
 			put("element", new Integer[] {75, 1000});
 		}});
 		
