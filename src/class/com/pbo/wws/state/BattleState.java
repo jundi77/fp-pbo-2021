@@ -251,7 +251,6 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 
 	public void setPlayer(Player player) {
 		this.player = player;
-		player.setMp(0);
 	}
 
 	public void confirmSpell() {
