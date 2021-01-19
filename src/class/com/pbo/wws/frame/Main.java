@@ -5,8 +5,6 @@ import java.awt.GraphicsEnvironment;
 
 import javax.swing.JFrame;
 
-import com.pbo.wws.GamePanel;
-
 public class Main {
 	public static final String resourcePath = "/res/pbo/wws";
 	private static int width = 1280, height = 720;

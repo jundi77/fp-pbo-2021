@@ -11,13 +11,11 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
-import com.pbo.wws.Exitable;
-import com.pbo.wws.GamePanel;
-import com.pbo.wws.MenuChoicable;
 import com.pbo.wws.entity.Enemy;
 import com.pbo.wws.entity.FightingCharacter;
 import com.pbo.wws.entity.FightingCharacter.FightingCharacterException;
 import com.pbo.wws.entity.Player;
+import com.pbo.wws.frame.GamePanel;
 import com.pbo.wws.frame.Main;
 import com.pbo.wws.io.KeyMapper;
 import com.pbo.wws.io.Renderable;

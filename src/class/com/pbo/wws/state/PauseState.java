@@ -7,8 +7,6 @@ import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
 
-import com.pbo.wws.Exitable;
-import com.pbo.wws.MenuChoicable;
 import com.pbo.wws.io.Renderable;
 import com.pbo.wws.frame.Main;
 import com.pbo.wws.io.KeyMapper;

@@ -1,4 +1,4 @@
-package com.pbo.wws;
+package com.pbo.wws.frame;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -9,7 +9,6 @@ import java.io.IOException;
 
 import javax.swing.JPanel;
 
-import com.pbo.wws.frame.Main;
 import com.pbo.wws.io.KeyMapper;
 import com.pbo.wws.io.Renderer;
 import com.pbo.wws.io.Ticker;

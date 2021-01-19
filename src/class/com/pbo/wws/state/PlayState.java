@@ -8,10 +8,9 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
-import com.pbo.wws.Exitable;
-import com.pbo.wws.Place;
 import com.pbo.wws.entity.Character.CharacterException;
 import com.pbo.wws.entity.Enemy;
+import com.pbo.wws.entity.Place;
 import com.pbo.wws.entity.Player;
 import com.pbo.wws.frame.Main;
 import com.pbo.wws.io.KeyMapper;

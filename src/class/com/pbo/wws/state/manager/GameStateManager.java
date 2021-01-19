@@ -3,7 +3,6 @@ package com.pbo.wws.state.manager;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import com.pbo.wws.EndState;
 import com.pbo.wws.entity.Enemy;
 import com.pbo.wws.entity.Player;
 import com.pbo.wws.entity.Character.CharacterException;
@@ -11,6 +10,7 @@ import com.pbo.wws.frame.Main;
 import com.pbo.wws.io.Renderer;
 import com.pbo.wws.io.Speech;
 import com.pbo.wws.state.BattleState;
+import com.pbo.wws.state.EndState;
 import com.pbo.wws.state.GameOState;
 import com.pbo.wws.state.GameState;
 import com.pbo.wws.state.MenuState;

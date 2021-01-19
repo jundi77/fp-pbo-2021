@@ -1,4 +1,4 @@
-package com.pbo.wws;
+package com.pbo.wws.state;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
