@@ -68,7 +68,17 @@ public abstract class Character implements Renderable, Movable {
 		
 		this.visible = visible;
 	}
-
+	
+//	public void resetEnemy(String spriteImgFileName) throws CharacterException{
+//		try {
+//			sprite = ImageIO.read(getClass()
+//					.getResourceAsStream(Main.resourcePath + characterRootDir + "/" + this.name + "/" + spriteImgFileName));
+//			System.out.println("[Character]: Sprite for " + this.name + " is loaded");
+//		} catch (Exception e) {
+//			throw new CharacterException("[Character]: Failed to load sprite for " + this.name);
+//		}
+//	}
+	
 	@Override
 	public boolean getVisibility() {
 		return visible;

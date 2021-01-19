@@ -126,7 +126,11 @@ public class PlayState extends GameState implements Exitable
 			GameStateManager.setState(GameStateManager.PLAYSTATE);
 		}
 	}
-
+	
+	public void resetPlay(){
+		p.resetPlace();
+	}
+	
 	@Override
 	public void setVisible(boolean visible) {
 		if (visible) {
@@ -137,7 +141,7 @@ public class PlayState extends GameState implements Exitable
 
 	@Override
 	public void quit() {
-		((PauseState) GameStateManager.getState(GameStateManager.PAUSESTATE)).setResumeTo(GameStateManager.BATTLESTATE);
+		((PauseState) GameStateManager.getState(GameStateManager.PAUSESTATE)).setResumeTo(GameStateManager.PLAYSTATE);
 		GameStateManager.setState(GameStateManager.PAUSESTATE);
 	}
 

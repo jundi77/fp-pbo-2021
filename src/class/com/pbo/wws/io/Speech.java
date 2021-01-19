@@ -25,6 +25,8 @@ public class Speech {
         configuration.setLanguageModelPath("resource:/edu/cmu/sphinx/models/en-us/en-us.lm.bin");
         configuration.setUseGrammar(false);
 
+        this.config = configuration;
+
         LiveSpeechRecognizer recognizer;
 		try {
 			recognizer = new LiveSpeechRecognizer(configuration);
@@ -38,10 +40,15 @@ public class Speech {
 			
 			@Override
 			public void run() {
-				listener.startRecognition(false);
+				try {			
+					listener.startRecognition(false);
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
 				SpeechResult result;
 				while (listening && (result = listener.getResult()) != null) {
 					for(WordResult word : result.getWords()) {
+						if (!listening) break;
 						System.out.println("[Speech] " + word.getWord().toString());
 		                if (word.getWord().toString().equalsIgnoreCase(target)) {
 		                	((BattleState) GameStateManager.getState(GameStateManager.BATTLESTATE)).confirmSpell();
@@ -51,13 +58,12 @@ public class Speech {
 		            }
 				}
 				listener.stopRecognition();
-				
 			}
 		};
 		this.listenThread = new Thread(listenInBg);
     }
 
-	public void listen(String target) {
+	public synchronized void listen(String target) {
 		listening = true;
 		this.target = target;
 		if (!listenThread.isAlive()) {
@@ -68,6 +74,26 @@ public class Speech {
 
 	public synchronized void stopListen() {
 		listening = false;
+		this.listenThread.interrupt();
+		try {
+			listener.stopRecognition();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
+		newRecognizer();
 		this.listenThread = new Thread(listenInBg);
+	}
+
+	public synchronized void newRecognizer() {
+		LiveSpeechRecognizer recognizer;
+		try {
+			recognizer = new LiveSpeechRecognizer(this.config);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}
+
+        listener = recognizer;
 	}
 }

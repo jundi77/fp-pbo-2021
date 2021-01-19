@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
+import com.pbo.wws.entity.Character.CharacterException;
 import com.pbo.wws.entity.Enemy;
 import com.pbo.wws.entity.FightingCharacter;
 import com.pbo.wws.entity.FightingCharacter.FightingCharacterException;
@@ -67,7 +68,7 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 			add("armor");
 			add("burning");
 			add("college");
-			add("defence");
+			add("defense");
 			add("element");
 		}};
 
@@ -137,7 +138,7 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 			quit();
 		}
 	}
-
+	
 	@Override
 	public void render(Graphics g) {
 		g.drawImage(image, 0, 0, 1280, 720, null);
@@ -163,6 +164,18 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 				((PlayState) gsm.getState(gsm.PLAYSTATE)).killedMonsterAt(this.fromTile);
 			} else if (player.getHealth() <= 0) {
 				((GameOState) GameStateManager.getState(GameStateManager.GAMEOSTATE)).setWin(false);
+				
+				try {
+					enemy.setHealth(enemy.getFullHealth());
+					enemy.resetEnemy();
+					player.setHealth(player.getFullHealth());
+					player.setMp(player.getFullMp());
+				} catch (CharacterException e) {
+					e.printStackTrace();
+				}
+				
+				((PlayState) GameStateManager.getState(GameStateManager.PLAYSTATE)).resetPlay();
+				
 				GameStateManager.setState(GameStateManager.GAMEOSTATE);
 			}
 			enemy.playAnimation("ready");
@@ -249,8 +262,11 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 		return player;
 	}
 
-	public void setPlayer(Player player) {
+	public void setPlayer(Player player) throws FightingCharacterException {
 		this.player = player;
+
+		player.setHealth(player.getFullHealth());
+		player.setMp(player.getFullMp());
 	}
 
 	public void confirmSpell() {
@@ -259,7 +275,12 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 		player.setMp(player.getMp() - player.getSpells().get(this.playerSpell.get(selectedSpell))[0]);
 		try {
 			enemy.setHealth(enemy.getHealth() - player.getSpells().get(this.playerSpell.get(selectedSpell))[1]);
-			enemy.playAnimation("damaged");
+			if (enemy.getHealth() <= 0) {
+				enemy.playAnimation("mati");
+			} else {
+				enemy.playAnimation("damaged");				
+			}
+			this.currentTurn = 1;
 		} catch (FightingCharacterException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

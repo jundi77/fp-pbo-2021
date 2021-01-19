@@ -39,9 +39,9 @@ public class Player extends MagicCharacter {
 		 */
 		this.setSpells(new HashMap<String, Integer[]>(){{
 			put("armor",   new Integer[] {25, 10});
-			put("burning", new Integer[] {25, 25});
+			put("burning", new Integer[] {25, 30});
 			put("college", new Integer[] {25, 25});
-			put("defence", new Integer[] {0, 0});
+			put("defense", new Integer[] {0, 0});
 			put("element", new Integer[] {75, 1000});
 		}});
 		

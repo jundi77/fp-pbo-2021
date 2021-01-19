@@ -7,6 +7,7 @@ import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
+import com.pbo.wws.entity.Character.CharacterException;
 import com.pbo.wws.frame.Main;
 import com.pbo.wws.io.Ticker;
 
@@ -103,6 +104,11 @@ public class Enemy extends FightingCharacter implements CanAttack, Animatable {
 		}
 	}
 
+	public void resetEnemy(){
+		this.setHeight(120);
+		this.setWidth(120);
+	}
+	
 	@Override
 	public void playAnimation(String state) {
 		this.beforeAnimating(state);
