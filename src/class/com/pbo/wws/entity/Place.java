@@ -22,6 +22,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import com.pbo.wws.entity.FightingCharacter.FightingCharacterException;
 import com.pbo.wws.frame.Main;
 import com.pbo.wws.io.KeyMapper;
 import com.pbo.wws.io.Renderable;
@@ -214,7 +215,12 @@ public class Place implements Renderable, Movable{
 			}
 		}
 
-		this.detectEnemy();
+		try {
+			this.detectEnemy();
+		} catch (FightingCharacterException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 
 		this.collideHandling();
@@ -484,7 +490,7 @@ public class Place implements Renderable, Movable{
 		}
 	}
 
-	public void detectEnemy() {
+	public void detectEnemy() throws FightingCharacterException {
 		int currentTile = this.getCurrentTile();
 
 		int ulCurrentCol = currentTile % this.mapWidth;
