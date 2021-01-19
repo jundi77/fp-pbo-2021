@@ -120,13 +120,17 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 		} else if(KeyMapper.isPressed(KeyMapper.KEY_UP) && this.state == 0){
 			KeyMapper.confirmArrow();
 			currentChoice--;
-			if(currentChoice == -1){
+			if (player.getMp() <= 0) {
+				currentChoice = 1;
+			} else if(currentChoice == -1){
 				currentChoice = imageUI.length/ 2 - 1;
 			}
 		} else if(KeyMapper.isPressed(KeyMapper.KEY_DOWN) && this.state == 0){
 			KeyMapper.confirmArrow();
 			currentChoice++;
-			if(currentChoice == imageUI.length/ 2){
+			if (player.getMp() <= 0) {
+				currentChoice = 1;
+			} else if(currentChoice == imageUI.length/ 2){
 				currentChoice = 0;
 			}
 		} else if (KeyMapper.isPressed(KeyMapper.KEY_ESCAPE)) {
@@ -191,6 +195,7 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 		if (this.state == 0)
 		for(int options = 0; options < (imageUI.length / 2); options++)
 		{
+			if (options == 1 && player.getMp() <= 0) continue;
 			if(options == currentChoice) {
 				g.drawImage(imageUI[options * 2 + 1], 60, 550 + 50 * options, null);
 			} else {
