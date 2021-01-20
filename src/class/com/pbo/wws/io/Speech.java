@@ -81,7 +81,7 @@ public class Speech {
 			// TODO: handle exception
 		}
 
-		newRecognizer();
+//		newRecognizer();
 		this.listenThread = new Thread(listenInBg);
 	}
 

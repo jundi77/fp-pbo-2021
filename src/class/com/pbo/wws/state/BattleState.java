@@ -85,6 +85,7 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 				GameStateManager.speech.listen(this.playerSpell.get(selectedSpell));
 			} else if (this.state == 1) {
 				// keluar mode listen
+				System.out.println("[BS] batal spell");
 				GameStateManager.speech.stopListen();
 				this.state = 0;
 			}
@@ -101,11 +102,6 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 				} else {			
 					currentTurn = 1;
 				}
-			} else if (this.state == 1) {
-				// keluar mode listen
-				System.out.println("[BS] batal spell");
-				GameStateManager.speech.stopListen();
-				this.state = 0;
 			}
 			break;
 		default:
