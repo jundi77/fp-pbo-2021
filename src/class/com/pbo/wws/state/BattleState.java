@@ -138,7 +138,7 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 			quit();
 		}
 	}
-	
+	// TODO revisi kata"
 	@Override
 	public void render(Graphics g) {
 		g.drawImage(image, 0, 0, 1280, 720, null);
@@ -164,7 +164,6 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 				((PlayState) gsm.getState(gsm.PLAYSTATE)).killedMonsterAt(this.fromTile);
 			} else if (player.getHealth() <= 0) {
 				((GameOState) GameStateManager.getState(GameStateManager.GAMEOSTATE)).setWin(false);
-				
 				try {
 					enemy.setHealth(enemy.getFullHealth());
 					enemy.resetEnemy();

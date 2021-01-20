@@ -81,17 +81,9 @@ public class GameOState extends GameState implements Exitable, MenuChoicable
 		
 		moveChoice();
 
-		if (!win) {
-			g.setXORMode(Color.red);			
-		}
-
 		g.drawImage(image, 0, 0, 1280, 720, null);
 		g.setPaintMode();
-
-		g.setColor(Color.white);
-		g.setFont(GamePanel.getCoolFont());
-		g.drawString("GOOD JOB.", Main.getWidth() / 2 - 90, Main.getHeight() / 2 - 130);
-
+		
 		if (!win) {
 			g.drawImage(imageUI[4],50,50,null);			
 		}

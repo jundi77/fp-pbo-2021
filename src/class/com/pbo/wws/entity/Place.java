@@ -61,6 +61,8 @@ public class Place implements Renderable, Movable{
 				playerTileStart = 59,
 				xStart=0, yStart=0; // tempat player summon untuk map utama
 	
+	private boolean visible;	//Untuk transisi antar level
+	
 	private Character player = null;
 
 	/**
