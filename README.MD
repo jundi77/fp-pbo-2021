@@ -1,6 +1,6 @@
 # Final Project PBO Kelas G Tahun 2020
 
-Mempersembahkan: **Witch Who Speaks**!
+Mempersembahkan: **Wizard Who Speaks**!
 ![Gambar Main Menu](https://cdn.discordapp.com/attachments/801843033846186034/801843334469124096/unknown.png "Main Menu")
 
 ----
