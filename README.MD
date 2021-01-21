@@ -33,7 +33,7 @@ Final project dari mata kuliah Pemrograman Berbasis Objek Kelas G. Final project
 
 ### Getting Started
 
-<a href="https://gifyu.com/image/UHwI"><img src="https://s2.gifyu.com/images/2021-01-21-23-37-46.gif" alt="2021-01-21-23-37-46.gif" border="0" /></a>
+<img src="https://s2.gifyu.com/images/2021-01-21-23-37-46.gif" alt="2021-01-21-23-37-46.gif" border="0" />
 
 - Pemain dapat memainkan karakter dengan menggunakan keyboad untuk berjalan mengitari area bermain dengan tombol `A` `S` `W` `D` dan jeda dengan tombol `ESCAPE`.
 - Dalam mode jeda diberi dua pilihan berupa `Continue` untuk kembali ke permainan dan `Exit` untuk ke menu utama.![Diagram kelas]
