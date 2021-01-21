@@ -204,6 +204,7 @@ public class PlayState extends GameState implements Exitable
 			if(currentLevel<L.length){
 				resetPlay();
 				this.currentLevel += 1;
+				this.currentTransitionDuration = 1;
 				reset(currentLevel);
 				try {
 					c.setHealth(c.getFullHealth());
