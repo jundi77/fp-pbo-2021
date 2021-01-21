@@ -31,7 +31,7 @@ public class PauseState extends GameState implements Exitable, MenuChoicable
 			imageUI[4] = (Image)imageTombol.getSubimage(0, 0, 100, 12).getScaledInstance(300, 36, Image.SCALE_DEFAULT);
 			
 			int y=12;
-			for(int i = 0; i < imageUI.length ;i++)
+			for(int i = 0; i < imageUI.length - 1 ;i++)
 			{
 				imageUI[i] = (Image) imageTombol.getSubimage(0, y, 100, 12);
 				imageUI[i] = imageUI[i].getScaledInstance(300,36, Image.SCALE_DEFAULT);
