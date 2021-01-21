@@ -61,6 +61,8 @@ public class Place implements Renderable, Movable{
 				playerTileStart = 59,
 				xStart=0, yStart=0; // tempat player summon untuk map utama
 	
+	private boolean visible;	//Untuk transisi antar level
+	
 	private Character player = null;
 
 	/**
@@ -516,7 +518,13 @@ public class Place implements Renderable, Movable{
 	public HashMap<Integer, FightingCharacter> getEnemies() {
 		return this.enemies;
 	}
-
+	
+	//untuk mereset lokasi player jika kalah ke titik semula tanpa menghilangkan monster yang sudah dikalahkan
+	public void resetPlace(){
+		this.x = this.xStart;
+		this.y = this.yStart - this.height / 3;
+	}
+	
 	@Override
 	public boolean getVisibility() {
 		// TODO Auto-generated method stub

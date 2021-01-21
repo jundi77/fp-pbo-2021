@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
 
 import com.pbo.wws.frame.Main;
 import com.pbo.wws.state.manager.GameStateManager;
@@ -26,12 +27,14 @@ public class Sound
 		stateBgm = this.getClass().getResource(musicLocation);	
 	}
 
-	public void play(int currentState)
+	public void play()
 	{
 		try {
 			AudioInputStream audioInput = AudioSystem.getAudioInputStream(stateBgm);
 			clip = AudioSystem.getClip();	
 			clip.open(audioInput);
+			FloatControl volume = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+			volume.setValue(-10.0f);
 			clip.start();
 			clip.loop(Clip.LOOP_CONTINUOUSLY);			
 		} catch (Exception e) {

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
+import com.pbo.wws.entity.Character.CharacterException;
 import com.pbo.wws.entity.Enemy;
 import com.pbo.wws.entity.FightingCharacter;
 import com.pbo.wws.entity.FightingCharacter.FightingCharacterException;
@@ -84,6 +85,7 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 				GameStateManager.speech.listen(this.playerSpell.get(selectedSpell));
 			} else if (this.state == 1) {
 				// keluar mode listen
+				System.out.println("[BS] batal spell");
 				GameStateManager.speech.stopListen();
 				this.state = 0;
 			}
@@ -100,11 +102,6 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 				} else {			
 					currentTurn = 1;
 				}
-			} else if (this.state == 1) {
-				// keluar mode listen
-				System.out.println("[BS] batal spell");
-				GameStateManager.speech.stopListen();
-				this.state = 0;
 			}
 			break;
 		default:
@@ -137,7 +134,7 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 			quit();
 		}
 	}
-
+	// TODO revisi kata"
 	@Override
 	public void render(Graphics g) {
 		g.drawImage(image, 0, 0, 1280, 720, null);
@@ -163,6 +160,17 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 				((PlayState) gsm.getState(gsm.PLAYSTATE)).killedMonsterAt(this.fromTile);
 			} else if (player.getHealth() <= 0) {
 				((GameOState) GameStateManager.getState(GameStateManager.GAMEOSTATE)).setWin(false);
+				try {
+					enemy.setHealth(enemy.getFullHealth());
+					enemy.resetEnemy();
+					player.setHealth(player.getFullHealth());
+					player.setMp(player.getFullMp());
+				} catch (CharacterException e) {
+					e.printStackTrace();
+				}
+				
+				((PlayState) GameStateManager.getState(GameStateManager.PLAYSTATE)).resetPlay();
+				
 				GameStateManager.setState(GameStateManager.GAMEOSTATE);
 			}
 			enemy.playAnimation("ready");
@@ -269,7 +277,6 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 			}
 			this.currentTurn = 1;
 		} catch (FightingCharacterException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		this.state = 0;
@@ -279,5 +286,10 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 	public void quit() {
 		((PauseState) GameStateManager.getState(GameStateManager.PAUSESTATE)).setResumeTo(GameStateManager.BATTLESTATE);
 		GameStateManager.setState(GameStateManager.PAUSESTATE);
+	}
+
+	public void wrongSpell() {
+		// TODO Auto-generated method stub
+		
 	}
 }

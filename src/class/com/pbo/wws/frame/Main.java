@@ -2,7 +2,6 @@ package com.pbo.wws.frame;
 
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
-
 import javax.swing.JFrame;
 
 public class Main {

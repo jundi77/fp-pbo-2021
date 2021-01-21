@@ -1,0 +1,9 @@
+#JSGF V1.0;
+
+/**
+ * JSGF Grammar 
+ */
+
+grammar grammar;
+
+public <playerSpells>  = (armonk | armor | armored | armories | armory | burning | burningham | burnings | burnish | colleen | college | colledge | colleges | colleges | defense | defense | defenseless | defenses | defenses | element | elemental | elemental | elementary | elementary | elementary | elements);
