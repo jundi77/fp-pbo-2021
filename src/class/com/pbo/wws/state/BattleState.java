@@ -8,6 +8,7 @@ import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import javax.imageio.ImageIO;
 
@@ -21,6 +22,7 @@ import com.pbo.wws.frame.Main;
 import com.pbo.wws.io.KeyMapper;
 import com.pbo.wws.io.Renderable;
 import com.pbo.wws.io.Renderer;
+import com.pbo.wws.io.Ticker;
 import com.pbo.wws.state.manager.GameStateManager;
 
 public class BattleState extends GameState implements Exitable, MenuChoicable 
@@ -29,18 +31,24 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 				currentTurn = 0,
 				fromTile, // 0 itu player, 1 itu enemy
 				state = 0,
-				selectedSpell = 0; // 0 non listening, 1 listening spell
+				selectedSpell = 0, // 0 non listening, 1 listening spell
+				listenedWrongDuration,
+				currentListenedWrongDuration;
 	private Image image;
 	private Image[] imageUI = new Image[4];
-	private BufferedImage mpHud, spellHud, serangBatal;
+	private BufferedImage mpHud, spellHud, serangBatal, dialogMusuh;
 	private Enemy enemy = null;
 	private Player player = null;
 	private ArrayList<String> playerSpell;
+	private String listenedWrong;
 
 	@SuppressWarnings("serial")
 	public BattleState (GameStateManager gsm) 
 	{
 		this.gsm = gsm;
+		this.listenedWrongDuration = Ticker.getRatePerSecond() * 3;
+		this.currentListenedWrongDuration = 0;
+		this.listenedWrong = null;
 
 		try{
 			image = (Image) ImageIO.read(getClass().getResourceAsStream(Main.resourcePath + "/ui/Kombat/uiKombat.png"));
@@ -60,6 +68,8 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 					.getResourceAsStream(Main.resourcePath + "/ui/Kombat/uiAttackSpecial.png"));
 			serangBatal = ImageIO.read(getClass()
 					.getResourceAsStream(Main.resourcePath + "/ui/Kombat/uiSerangBatal.png"));
+			dialogMusuh = ImageIO.read(getClass()
+					.getResourceAsStream(Main.resourcePath + "/ui/Kombat/MonsterFail.png"));
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -134,7 +144,7 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 			quit();
 		}
 	}
-	// TODO revisi kata"
+
 	@Override
 	public void render(Graphics g) {
 		g.drawImage(image, 0, 0, 1280, 720, null);
@@ -219,6 +229,19 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 			g.setColor(Color.black);
 			g.setFont(GamePanel.getCoolFont());
 			g.drawString(this.playerSpell.get(selectedSpell), Main.getWidth() / 2 - 90, Main.getHeight() / 2 - 130);
+			
+			if (listenedWrong != null) {
+				g.drawImage(dialogMusuh, Main.getWidth() / 2 + 70, Main.getHeight() / 2 - 30, dialogMusuh.getWidth() * 3, dialogMusuh.getHeight() * 3, null);
+				g.setFont(GamePanel.getCoolFont().deriveFont(50f));
+				g.drawString(listenedWrong + "??", Main.getWidth() / 2 + 90, Main.getHeight() / 2 - 10);
+				if (this.currentListenedWrongDuration <= this.listenedWrongDuration) {
+					this.currentListenedWrongDuration++;
+				} else {
+					this.listenedWrong = null;
+					this.currentListenedWrongDuration = 0;
+				}
+				
+			}
 		}
 
 		// config musuh kritis
@@ -227,7 +250,6 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 		}
 		enemy.render(g);
 		g.setPaintMode();
-		
 
 		// overlay blood transparent
 		g.setColor(
@@ -268,6 +290,19 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 		System.out.println("[BS] Confirmed spell");
 		GameStateManager.speech.stopListen();
 		player.setMp(player.getMp() - player.getSpells().get(this.playerSpell.get(selectedSpell))[0]);
+
+		for (int i = 0; i < playerSpell.size(); i++) {
+			String spell = playerSpell.get(i);
+			if (player.getSpells().get(spell)[0] > player.getMp()) {
+				playerSpell.remove(i);
+				--i;
+			}
+		}
+
+		if (player.getMp() <= 0) {
+			this.currentChoice = 1;
+		}
+
 		try {
 			enemy.setHealth(enemy.getHealth() - player.getSpells().get(this.playerSpell.get(selectedSpell))[1]);
 			if (enemy.getHealth() <= 0) {
@@ -288,8 +323,7 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 		GameStateManager.setState(GameStateManager.PAUSESTATE);
 	}
 
-	public void wrongSpell() {
-		// TODO Auto-generated method stub
-		
+	public void wrongSpell(String listenedWrong) {
+		this.listenedWrong = listenedWrong;
 	}
 }
