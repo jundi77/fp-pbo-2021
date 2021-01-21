@@ -10,6 +10,7 @@ import com.pbo.wws.io.Ticker;
 
 public class Player extends MagicCharacter {
 
+	@SuppressWarnings("serial")
 	public Player(String name,
 				  String spriteImgFileName,
 				  int height, int width,
@@ -42,7 +43,7 @@ public class Player extends MagicCharacter {
 			put("burning", new Integer[] {25, 30});
 			put("college", new Integer[] {25, 25});
 			put("defense", new Integer[] {0, 0});
-			put("element", new Integer[] {75, 1000});
+			put("element", new Integer[] {75, 75});
 		}});
 		
 		this.setFullHealth(150);
