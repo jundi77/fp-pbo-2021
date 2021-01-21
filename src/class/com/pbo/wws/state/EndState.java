@@ -38,13 +38,12 @@ public class EndState extends GameState implements Exitable
 	@Override
 	public void quit() {
 		setVisible(false);
+		((PlayState) gsm.getState(gsm.PLAYSTATE)).reset();
 		GameStateManager.setState(GameStateManager.MENUSTATE);
 	}
 	
 	@Override
 	public void render(Graphics g) {
-		if(KeyMapper.isPressed(KeyMapper.KEY_ENTER))
-			quit();
 		if(KeyMapper.isPressed(KeyMapper.KEY_ENTER)){
 			KeyMapper.confirmEnter();
 			quit();

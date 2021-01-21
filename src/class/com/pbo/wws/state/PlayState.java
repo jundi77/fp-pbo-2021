@@ -223,7 +223,6 @@ public class PlayState extends GameState implements Exitable
 				
 			}else{
 				((GameOState) GameStateManager.getState(GameStateManager.GAMEOSTATE)).setWin(true);
-				((PlayState) gsm.getState(gsm.PLAYSTATE)).reset();
 				GameStateManager.setState(GameStateManager.ENDSTATE);				
 			}
 			}
