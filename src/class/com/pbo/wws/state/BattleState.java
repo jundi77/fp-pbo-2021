@@ -279,11 +279,19 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 		return player;
 	}
 
+	@SuppressWarnings("serial")
 	public void setPlayer(Player player) throws FightingCharacterException {
 		this.player = player;
 
 		player.setHealth(player.getFullHealth());
 		player.setMp(player.getFullMp());
+		this.playerSpell = new ArrayList<String>() {{
+			add("armor");
+			add("burning");
+			add("college");
+			add("defense");
+			add("element");
+		}};
 	}
 
 	public void confirmSpell() {
