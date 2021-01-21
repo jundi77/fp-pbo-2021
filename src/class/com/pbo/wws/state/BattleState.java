@@ -34,13 +34,15 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 				selectedSpell = 0, // 0 non listening, 1 listening spell
 				listenedWrongDuration,
 				currentListenedWrongDuration;
-	private Image image;
+	private Image[] image = new Image[3];
 	private Image[] imageUI = new Image[4];
 	private BufferedImage mpHud, spellHud, serangBatal, dialogMusuh;
 	private Enemy enemy = null;
 	private Player player = null;
 	private ArrayList<String> playerSpell;
 	private String listenedWrong;
+	
+	private int currentLevel;
 
 	@SuppressWarnings("serial")
 	public BattleState (GameStateManager gsm) 
@@ -49,9 +51,13 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 		this.listenedWrongDuration = Ticker.getRatePerSecond() * 3;
 		this.currentListenedWrongDuration = 0;
 		this.listenedWrong = null;
-
+		this.currentLevel = 0;
+		
 		try{
-			image = (Image) ImageIO.read(getClass().getResourceAsStream(Main.resourcePath + "/ui/Kombat/uiKombat.png"));
+			image[0] = (Image) ImageIO.read(getClass().getResourceAsStream(Main.resourcePath + "/ui/Kombat/uiKombat1.png"));
+			image[1] = (Image) ImageIO.read(getClass().getResourceAsStream(Main.resourcePath + "/ui/Kombat/uiKombat2.png"));
+			image[2] = (Image) ImageIO.read(getClass().getResourceAsStream(Main.resourcePath + "/ui/Kombat/uiKombat3.png"));
+			
 			BufferedImage imageTombol = ImageIO.read(getClass().getResourceAsStream(Main.resourcePath + "/ui/Kombat/tombolKombat.png"));
 			
 			int y=0;
@@ -91,6 +97,9 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 			if (this.state == 0) {
 				// masuk ke mode listen
 				selectedSpell = (int) ((Math.random() * 10)  % this.playerSpell.size());
+				while (player.getSpells().get(playerSpell.get(selectedSpell))[0] > player.getMp()) {
+					selectedSpell = ++selectedSpell % playerSpell.size();
+				}
 				this.state = 1;
 				GameStateManager.speech.listen(this.playerSpell.get(selectedSpell));
 			} else if (this.state == 1) {
@@ -147,7 +156,7 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 
 	@Override
 	public void render(Graphics g) {
-		g.drawImage(image, 0, 0, 1280, 720, null);
+		g.drawImage(image[currentLevel], 0, 0, 1280, 720, null);
 		enemy.setX(Main.getWidth() / 2);
 		enemy.setY(Main.getHeight() / 2 + 100);
 		enemy.setWidth(250);
@@ -168,6 +177,9 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 		if (!enemy.isAnimating()) {
 			if (enemy.getHealth() <= 0) {
 				((PlayState) gsm.getState(gsm.PLAYSTATE)).killedMonsterAt(this.fromTile);
+				if(PlayState.currentLevel != 2){
+					GameStateManager.setState(GameStateManager.PLAYSTATE);
+				}
 			} else if (player.getHealth() <= 0) {
 				((GameOState) GameStateManager.getState(GameStateManager.GAMEOSTATE)).setWin(false);
 				try {
@@ -178,10 +190,11 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 				} catch (CharacterException e) {
 					e.printStackTrace();
 				}
-				
+
 				((PlayState) GameStateManager.getState(GameStateManager.PLAYSTATE)).resetPlay();
 				
 				GameStateManager.setState(GameStateManager.GAMEOSTATE);
+				
 			}
 			enemy.playAnimation("ready");
 		} else if (enemy.isAnimating() && !enemy.getCurrentAnimationState().equalsIgnoreCase("ready")){
@@ -262,6 +275,7 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 	public void setVisible(boolean visible) {
 		if (visible) {
 			System.out.println("[BattleState] Pindah ke aku");
+			currentLevel = PlayState.currentLevel;
 		}
 		super.setVisible(visible);
 	}
@@ -298,14 +312,14 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 		System.out.println("[BS] Confirmed spell");
 		GameStateManager.speech.stopListen();
 		player.setMp(player.getMp() - player.getSpells().get(this.playerSpell.get(selectedSpell))[0]);
-
-		for (int i = 0; i < playerSpell.size(); i++) {
-			String spell = playerSpell.get(i);
-			if (player.getSpells().get(spell)[0] > player.getMp()) {
-				playerSpell.remove(i);
-				--i;
-			}
-		}
+//
+//		for (int i = 0; i < playerSpell.size(); i++) {
+//			String spell = playerSpell.get(i);
+//			if (player.getSpells().get(spell)[0] > player.getMp()) {
+//				playerSpell.remove(i);
+//				--i;
+//			}
+//		}
 
 		if (player.getMp() <= 0) {
 			this.currentChoice = 1;

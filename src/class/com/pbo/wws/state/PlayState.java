@@ -27,8 +27,10 @@ public class PlayState extends GameState implements Exitable
 	private Player c;
 	private Enemy[] e;
 	private final String[] L = {"Level1","Level2","Level3"};
-	private int currentLevel, transitionDuration, currentTransitionDuration;
+	private int transitionDuration, currentTransitionDuration;
 	
+	static int currentLevel;
+
 	@SuppressWarnings("serial")
 	public PlayState (GameStateManager gsm)
 	{
@@ -42,7 +44,7 @@ public class PlayState extends GameState implements Exitable
 
 	public void reset() {
 		
-		this.currentLevel = 2;
+		this.currentLevel = 0;
 		
 		try {
 			c = new Player("main", "spriteUtama(32x32).png", 120, 120, 32, 32, Main.getWidth() / 2, Main.getHeight() / 2);
@@ -158,6 +160,9 @@ public class PlayState extends GameState implements Exitable
 				System.exit(1);
 			}
 			break;
+			
+		default :
+			break;
 		}	
 	}
 	
@@ -201,7 +206,7 @@ public class PlayState extends GameState implements Exitable
 		this.p[currentLevel].getEnemies().remove(tile);
 		if (this.p[currentLevel].getEnemies().size() == 0) {
 			
-			if(currentLevel<L.length){
+			if(currentLevel<L.length && currentLevel!= 2){
 				resetPlay();
 				this.currentLevel += 1;
 				this.currentTransitionDuration = 1;
@@ -219,7 +224,7 @@ public class PlayState extends GameState implements Exitable
 			}
 			}
 		else {
-			GameStateManager.setState(GameStateManager.PLAYSTATE);
+			GameStateManager.setState(GameStateManager.PLAYSTATE);	
 		}
 	}
 	
