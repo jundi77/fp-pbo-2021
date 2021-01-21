@@ -24,7 +24,7 @@ public class PlayState extends GameState implements Exitable
 	private Player c;
 	private Enemy[] e;
 	private final String[] L = {"Level1","Level2","Level3"};
-	private int currentLevel;
+	static int currentLevel;
 
 	@SuppressWarnings("serial")
 	public PlayState (GameStateManager gsm)
@@ -33,7 +33,7 @@ public class PlayState extends GameState implements Exitable
 		this.reset();
 		Renderer.addDrawable(this);
 	}
-// 		TODO polimorphism reset, dan reset parameter untuk pilih yang mana levelnya.
+	
 	public void reset() {
 		
 		this.currentLevel = 0;
@@ -152,6 +152,9 @@ public class PlayState extends GameState implements Exitable
 				System.exit(1);
 			}
 			break;
+			
+		default :
+			break;
 		}	
 	}
 	
@@ -182,7 +185,7 @@ public class PlayState extends GameState implements Exitable
 		this.p[currentLevel].getEnemies().remove(tile);
 		if (this.p[currentLevel].getEnemies().size() == 0) {
 			
-			if(currentLevel<L.length){
+			if(currentLevel<L.length && currentLevel!= 2){
 				resetPlay();
 				this.currentLevel += 1;
 				reset(currentLevel);
@@ -199,7 +202,7 @@ public class PlayState extends GameState implements Exitable
 			}
 			}
 		else {
-			GameStateManager.setState(GameStateManager.PLAYSTATE);
+			GameStateManager.setState(GameStateManager.PLAYSTATE);	
 		}
 	}
 	

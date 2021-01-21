@@ -2,17 +2,21 @@ package com.pbo.wws.io;
 
 import java.io.IOException;
 
+import com.pbo.wws.frame.Main;
 import com.pbo.wws.state.BattleState;
 import com.pbo.wws.state.manager.GameStateManager;
 
 import edu.cmu.sphinx.api.Configuration;
+import edu.cmu.sphinx.api.Context;
 import edu.cmu.sphinx.api.LiveSpeechRecognizer;
+import edu.cmu.sphinx.api.Microphone;
 import edu.cmu.sphinx.api.SpeechResult;
+import edu.cmu.sphinx.recognizer.Recognizer;
 import edu.cmu.sphinx.result.WordResult;
 
 public class Speech {
 	private	Configuration config;
-	private LiveSpeechRecognizer listener;
+	private WWSLiveSpeechRecognizer listener;
 	private boolean listening = false;
 	private Runnable listenInBg;
 	private Thread listenThread;
@@ -21,52 +25,60 @@ public class Speech {
 	public Speech() {
         Configuration configuration = new Configuration();
         configuration.setAcousticModelPath("resource:/edu/cmu/sphinx/models/en-us/en-us");
-        configuration.setDictionaryPath("resource:/edu/cmu/sphinx/models/en-us/cmudict-en-us.dict");
         configuration.setLanguageModelPath("resource:/edu/cmu/sphinx/models/en-us/en-us.lm.bin");
-        configuration.setUseGrammar(false);
+        configuration.setDictionaryPath("resource:/edu/cmu/sphinx/models/en-us/cmudict-en-us.dict");
+        
+        // custom grammar menyesuaikan speel pemain
+        configuration.setGrammarPath("resource:" + Main.resourcePath + "/grammars/");
+        configuration.setGrammarName("playerSpells");
+        configuration.setUseGrammar(true);
+        System.out.println(configuration.getGrammarPath());
 
         this.config = configuration;
 
-        LiveSpeechRecognizer recognizer;
 		try {
-			recognizer = new LiveSpeechRecognizer(configuration);
+			listener = new WWSLiveSpeechRecognizer(configuration);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return;
 		}
 
-        listener = recognizer;
         this.listenInBg = new Runnable() {
 			
 			@Override
 			public void run() {
-				try {			
-					listener.startRecognition(false);
-				} catch (Exception e) {
-					// TODO: handle exception
-				}
 				SpeechResult result;
-				while (listening && (result = listener.getResult()) != null) {
-					for(WordResult word : result.getWords()) {
+				try {
+					while (listening && (result = listener.getResult()) != null) {
+						for(WordResult word : result.getWords()) {
+							if (!listening) break;
+							System.out.println("[Speech] " + word.getWord().toString());
+							if (word.getWord().toString().equalsIgnoreCase(target)) {
+								((BattleState) GameStateManager.getState(GameStateManager.BATTLESTATE)).confirmSpell();
+								return;
+							} else {
+								((BattleState) GameStateManager.getState(GameStateManager.BATTLESTATE)).wrongSpell();
+							}
+						}
 						if (!listening) break;
-						System.out.println("[Speech] " + word.getWord().toString());
-		                if (word.getWord().toString().equalsIgnoreCase(target)) {
-		                	((BattleState) GameStateManager.getState(GameStateManager.BATTLESTATE)).confirmSpell();
-		                	listener.stopRecognition();
-		                	return;
-		                }
-		            }
+					}					
+				} catch (Exception e) {
+					// is okay, string target terhubung ke kelas speech
 				}
-				listener.stopRecognition();
 			}
 		};
+
+		listener.startRecognizer();
 		this.listenThread = new Thread(listenInBg);
     }
 
 	public synchronized void listen(String target) {
+		// TODO buggy
 		listening = true;
 		this.target = target;
+
 		if (!listenThread.isAlive()) {
+			listener.startMic();
 			listenThread.start();
 		}
 		
@@ -74,26 +86,17 @@ public class Speech {
 
 	public synchronized void stopListen() {
 		listening = false;
-		this.listenThread.interrupt();
-		try {
-			listener.stopRecognition();
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
 
-//		newRecognizer();
+		new Thread(new Runnable() {
+			public void run() {
+				Thread stopThread = listenThread;
+				WWSLiveSpeechRecognizer stopListener = listener;
+
+				stopThread.interrupt();
+				stopListener.stopMic();
+			}
+		}).run();
+
 		this.listenThread = new Thread(listenInBg);
-	}
-
-	public synchronized void newRecognizer() {
-		LiveSpeechRecognizer recognizer;
-		try {
-			recognizer = new LiveSpeechRecognizer(this.config);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return;
-		}
-
-        listener = recognizer;
 	}
 }
