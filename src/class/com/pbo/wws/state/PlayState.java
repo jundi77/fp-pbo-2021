@@ -1,5 +1,6 @@
 package com.pbo.wws.state;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.io.IOException;
 import java.util.HashMap;
@@ -13,9 +14,11 @@ import com.pbo.wws.entity.Enemy;
 import com.pbo.wws.entity.Movable;
 import com.pbo.wws.entity.Place;
 import com.pbo.wws.entity.Player;
+import com.pbo.wws.frame.GamePanel;
 import com.pbo.wws.frame.Main;
 import com.pbo.wws.io.KeyMapper;
 import com.pbo.wws.io.Renderer;
+import com.pbo.wws.io.Ticker;
 import com.pbo.wws.state.manager.GameStateManager;
 
 public class PlayState extends GameState implements Exitable
@@ -24,18 +27,24 @@ public class PlayState extends GameState implements Exitable
 	private Player c;
 	private Enemy[] e;
 	private final String[] L = {"Level1","Level2","Level3"};
+	private int transitionDuration, currentTransitionDuration;
+	
 	static int currentLevel;
 
 	@SuppressWarnings("serial")
 	public PlayState (GameStateManager gsm)
 	{
 		this.gsm = gsm;
+		this.transitionDuration = (int) (Ticker.getRatePerSecond() * 1.5);
+		this.currentTransitionDuration = 1;
+
 		this.reset();
 		Renderer.addDrawable(this);
 	}
-	
+
 	public void reset() {
 		
+		this.currentTransitionDuration = 1;
 		this.currentLevel = 0;
 		
 		try {
@@ -170,8 +179,21 @@ public class PlayState extends GameState implements Exitable
 	@Override
 	public void render(Graphics g) {
 		keyWatcher();
-		p[currentLevel].render(g);
-		c.render(g);
+		
+		if (currentTransitionDuration > 0 && currentTransitionDuration < transitionDuration) {
+			g.setFont(GamePanel.getCoolFont());
+			g.setColor(Color.BLACK);
+			g.drawRect(0, 0, Main.getWidth(), Main.getHeight());
+			g.setColor(Color.WHITE);
+			
+			g.drawString("Level " + (this.currentLevel + 1), Main.getWidth() / 2 - 100, Main.getHeight() / 2 + 150);
+			c.render(g);
+			currentTransitionDuration++;
+		} else {
+			p[currentLevel].render(g);
+			c.render(g);			
+		}
+
 	}
 
 	public void keyWatcher() {
@@ -188,6 +210,7 @@ public class PlayState extends GameState implements Exitable
 			if(currentLevel<L.length && currentLevel!= 2){
 				resetPlay();
 				this.currentLevel += 1;
+				this.currentTransitionDuration = 1;
 				reset(currentLevel);
 				try {
 					c.setHealth(c.getFullHealth());
@@ -198,6 +221,7 @@ public class PlayState extends GameState implements Exitable
 				
 			}else{
 				((GameOState) GameStateManager.getState(GameStateManager.GAMEOSTATE)).setWin(true);
+				((PlayState) gsm.getState(gsm.PLAYSTATE)).reset();
 				GameStateManager.setState(GameStateManager.ENDSTATE);				
 			}
 			}
@@ -208,6 +232,7 @@ public class PlayState extends GameState implements Exitable
 	
 	public void resetPlay(){
 		p[currentLevel].resetPlace();
+		this.currentTransitionDuration = 1;
 	}
 	
 	

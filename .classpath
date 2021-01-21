@@ -7,7 +7,7 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Rafki/workspace/Uji Coba/libraries/sphinx4-core-5prealpha-20160628.232526-10.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Rafki/workspace/Uji Coba/libraries/sphinx4-data-5prealpha-20160628.232535-10.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Rafki/Documents/Semester 3/PBO/eclipse/sphinx4-core-5prealpha-20160628.232526-10.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Rafki/Documents/Semester 3/PBO/eclipse/sphinx4-data-5prealpha-20160628.232535-10.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

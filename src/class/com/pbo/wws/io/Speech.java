@@ -57,7 +57,7 @@ public class Speech {
 								((BattleState) GameStateManager.getState(GameStateManager.BATTLESTATE)).confirmSpell();
 								return;
 							} else {
-								((BattleState) GameStateManager.getState(GameStateManager.BATTLESTATE)).wrongSpell();
+								((BattleState) GameStateManager.getState(GameStateManager.BATTLESTATE)).wrongSpell(word.getWord().toString());
 							}
 						}
 						if (!listening) break;
@@ -73,7 +73,6 @@ public class Speech {
     }
 
 	public synchronized void listen(String target) {
-		// TODO buggy
 		listening = true;
 		this.target = target;
 

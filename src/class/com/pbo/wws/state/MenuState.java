@@ -93,9 +93,9 @@ public class MenuState extends GameState implements Exitable, MenuChoicable
 		for(int options = 0; options < (tombol.length / 2); options++){
 			if (options == 1) continue; // belum ada fitur load
 			if(options == currentChoice){
-				g.drawImage(tombol[2 * options + 1], 100, 300 + 50 * ((options == 2)? 1 : 0), null);
+				g.drawImage(tombol[2 * options + 1], 40, 530 + 50 * ((options == 2)? 1 : 0), null);
 			} else {
-				g.drawImage(tombol[2 * options ], 100, 300 + 50 * ((options == 2)? 1 : 0), null);				
+				g.drawImage(tombol[2 * options ], 40, 530 + 50 * ((options == 2)? 1 : 0), null);				
 			}
 		}
 	}

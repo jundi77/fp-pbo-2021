@@ -210,9 +210,6 @@ public class Place implements Renderable, Movable{
 				if (e != null) {
 					e.setX(dx1 - this.width / 2);
 					e.setY(dy1 - this.height / 2);
-					if (!((Enemy) e).isAnimating() && this.getCurrentTile() == 79) {
-						((Enemy) e).playAnimation("serang");
-					};
 					e.render(g);
 				}
 			}
