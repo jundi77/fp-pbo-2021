@@ -277,7 +277,6 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 			}
 			this.currentTurn = 1;
 		} catch (FightingCharacterException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		this.state = 0;
@@ -287,5 +286,10 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 	public void quit() {
 		((PauseState) GameStateManager.getState(GameStateManager.PAUSESTATE)).setResumeTo(GameStateManager.BATTLESTATE);
 		GameStateManager.setState(GameStateManager.PAUSESTATE);
+	}
+
+	public void wrongSpell() {
+		// TODO Auto-generated method stub
+		
 	}
 }
