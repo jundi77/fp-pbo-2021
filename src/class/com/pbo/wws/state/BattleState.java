@@ -264,6 +264,18 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 		enemy.render(g);
 		g.setPaintMode();
 
+		if (listenedWrong != null) {
+			g.drawImage(dialogMusuh, Main.getWidth() / 2 + 70, Main.getHeight() / 2 - 30, dialogMusuh.getWidth() * 3, dialogMusuh.getHeight() * 3, null);
+			g.setFont(GamePanel.getCoolFont().deriveFont(50f));
+			g.drawString(listenedWrong + "??", Main.getWidth() / 2 + 90, Main.getHeight() / 2 - 10);
+			if (this.currentListenedWrongDuration <= this.listenedWrongDuration) {
+				this.currentListenedWrongDuration++;
+			} else {
+				this.listenedWrong = null;
+				this.currentListenedWrongDuration = 0;
+			}
+		}
+
 		// overlay blood transparent
 		g.setColor(
 				new Color(255, 0, 0, (int) ((player.getFullHealth() - player.getHealth()) / (float) player.getFullHealth() * 100))
@@ -312,14 +324,6 @@ public class BattleState extends GameState implements Exitable, MenuChoicable
 		System.out.println("[BS] Confirmed spell");
 		GameStateManager.speech.stopListen();
 		player.setMp(player.getMp() - player.getSpells().get(this.playerSpell.get(selectedSpell))[0]);
-//
-//		for (int i = 0; i < playerSpell.size(); i++) {
-//			String spell = playerSpell.get(i);
-//			if (player.getSpells().get(spell)[0] > player.getMp()) {
-//				playerSpell.remove(i);
-//				--i;
-//			}
-//		}
 
 		if (player.getMp() <= 0) {
 			this.currentChoice = 1;

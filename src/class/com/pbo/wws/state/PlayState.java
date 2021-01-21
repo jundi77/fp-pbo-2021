@@ -165,6 +165,8 @@ public class PlayState extends GameState implements Exitable
 		default :
 			break;
 		}	
+		
+		this.currentTransitionDuration = 1;
 	}
 	
 	private Enemy[] generateEnemy() throws CharacterException, IOException {
